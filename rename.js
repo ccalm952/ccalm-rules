@@ -6,7 +6,7 @@
 // 可改配置
 const CONFIG = {
   filter: true, // 开启后仅保留白名单里的节点
-  flag: true, // true：带国旗；false：仅 前缀 香港 01
+  flag: false, // true：带国旗；false：仅 前缀 香港 01
   regions: ["香港", "台湾", "日本", "韩国", "新加坡", "美国"], // 白名单
   flags: {
     香港: "🇭🇰",
