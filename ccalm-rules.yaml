@@ -9,6 +9,8 @@ rules:
   - GEOSITE,apple-cn,DIRECT
   - GEOSITE,category-games@cn,DIRECT
   - GEOSITE,steam@cn,DIRECT
+  # 自建直连
+  - DOMAIN-SUFFIX,ccalm.xyz,DIRECT
   # 业务代理
   - GEOSITE,category-ai-!cn,AI
   - GEOSITE,github,github
