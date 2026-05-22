@@ -1,13 +1,12 @@
 /**
  * Sub-Store 节点重命名 + 区域过滤
- * 脚本操作：@rename.js
+ * 脚本操作：@rename.js#name=yep（前缀由 name= 指定，每条订阅各写各的）
  */
 
 // 可改配置
 const CONFIG = {
-  prefix: "yep", // 机场前缀，重命名后：yep 🇭🇰 香港 01
   filter: true, // 开启后仅保留白名单里的节点
-  flag: true, // true：yep 🇭🇰 香港 01；false：yep 香港 01
+  flag: true, // true：带国旗；false：仅 前缀 香港 01
   regions: ["香港", "台湾", "日本", "韩国", "新加坡", "美国"], // 白名单
   flags: {
     香港: "🇭🇰",
@@ -19,6 +18,9 @@ const CONFIG = {
   },
 };
 
+const args = $arguments || {};
+const prefix = args.name != null ? decodeURI(args.name) : ""; // 前缀只来自 #name=，未写则为空
+
 // 命名与过滤
 function regionOf(name) {
   return CONFIG.regions.find((r) => name.includes(r)) || null;
@@ -26,7 +28,7 @@ function regionOf(name) {
 
 function buildName(region, index) {
   const no = String(index).padStart(2, "0");
-  const parts = [CONFIG.prefix, CONFIG.flag ? CONFIG.flags[region] : "", region].filter(Boolean);
+  const parts = [prefix, CONFIG.flag ? CONFIG.flags[region] : "", region].filter(Boolean);
   return parts.join(" ") + " " + no;
 }
 
