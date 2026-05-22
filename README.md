@@ -1,34 +1,55 @@
 # ccalm-rules
 
-Mihomo / Clash 分流覆写，仓库内仅维护 [ccalm-rules.yaml](./ccalm-rules.yaml)。
+Mihomo / Clash 分流：[ccalm-rules.yaml](./ccalm-rules.yaml) · 节点重命名：[rename.js](./rename.js)
 
-## 用法
-
-| 场景 | 操作 |
-|------|------|
-| Clash Party | 设置 → 覆写 → YAML，粘贴全文或填远程地址。见 [覆写文档](https://clashparty.org/docs/guide/override/yaml) |
-| Sub-Store | 文件管理 → Mihomo 配置 → 脚本操作，粘贴全文（YAML patch） |
-| 远程引用 | 使用下方 GitHub raw 链接（`main` 分支） |
+## 远程引用
 
 ```text
 https://raw.githubusercontent.com/ccalm952/ccalm-rules/main/ccalm-rules.yaml
 ```
 
-## 节点命名
+Clash Party：设置 → 覆写 → YAML，粘贴全文或填上址。见 [覆写文档](https://clashparty.org/docs/guide/override/yaml)。
 
-地区 url-test 组按节点名前缀匹配，Sub-Store 组合订阅里重命名即可：
+## Sub-Store
 
-`香港 `、`美国 `、`韩国 `、`日本 `（前缀 + 空格 + 名称）
+文档：[xream/sub-store](https://hub.docker.com/r/xream/sub-store)
+
+**host + 合并端口**（本机 `3000` 占用时用 `3001`；面板端口看 `SUB_STORE_BACKEND_API_PORT`，`PORT=9876` 是 HTTP-META）：
+
+```bash
+docker run -it -d --restart=always --network host \
+  -e "SUB_STORE_BACKEND_SYNC_CRON=55 23 * * *" \
+  -e HOST=127.0.0.1 -e PORT=9876 \
+  -e SUB_STORE_BACKEND_API_PORT=3001 \
+  -e SUB_STORE_BACKEND_API_HOST=127.0.0.1 \
+  -e SUB_STORE_BACKEND_MERGE=true \
+  -e SUB_STORE_FRONTEND_BACKEND_PATH=/ccalm \
+  -v /root/sub-store-data:/opt/app/data \
+  --name sub-store xream/sub-store
+```
+
+本机：`http://127.0.0.1:3001/ccalm` · 公网：Nginx 443 反代到该地址 · 数据：`/root/sub-store-data`
+
+bridge 部署见官方示例，路径改为 `/ccalm`，`-p 127.0.0.1:3001:3001`。
+
+### 流程
+
+1. 文件管理上传 [rename.js](./rename.js)
+2. 单条订阅脚本操作：`@rename.js`
+3. 组合订阅加入该单条
+4. Mihomo 配置粘贴 `ccalm-rules.yaml` 或上方 raw 链接，组合订阅关联此配置
+
+### rename.js（改 `CONFIG`）
+
+| 项 | 说明 |
+|----|------|
+| `prefix` | 机场前缀，如 `yep 🇭🇰 香港 01` |
+| `regions` | 保留地区白名单 |
+| `filter` | `true` 丢弃白名单外节点 |
+| `flag` | 默认 `true` 加国旗 |
+
+`ccalm-rules.yaml` 地区组 `filter: '香港'` 等与节点名关键字对应。
 
 ## 规则库
 
-GeoSite / GeoIP：[meta-rules-dat](https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geosite.dat)（`geosite.dat`、`geoip.dat`）。
-
-## 编辑约定
-
-排版见 [.editorconfig](./.editorconfig)。覆写文件只写需覆盖的字段（如 `mode`、`rules`、`proxy-groups`），勿加仅供文档的顶层键。
-
-- 规则一行一条：`TYPE,值,策略`；`no-resolve` 写在行尾
-- 策略组名与 `rules` 引用完全一致
-- `filter` 正则用单引号，如 `'^香港\s'`
-- 注释用 `#` 做分组标题即可
+[meta-rules-dat](https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geosite.dat)（`geosite.dat`、`geoip.dat`）
