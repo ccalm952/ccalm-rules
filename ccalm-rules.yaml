@@ -50,20 +50,6 @@ rule-providers:
     path: ./ruleset/private.yaml
     interval: 86400
 
-  gfw:
-    type: http
-    behavior: domain
-    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/gfw.txt"
-    path: ./ruleset/gfw.yaml
-    interval: 86400
-
-  tld-not-cn:
-    type: http
-    behavior: domain
-    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/tld-not-cn.txt"
-    path: ./ruleset/tld-not-cn.yaml
-    interval: 86400
-
   telegramcidr:
     type: http
     behavior: ipcidr
@@ -99,6 +85,7 @@ rules:
 
   # 自定义代理
   - DOMAIN-SUFFIX,store.bblcdn.com,香港节点
+  - GEOSITE,category-ai-!cn,AI
 
   # Loyalsoldier/clash-rules 白名单模式
   - RULE-SET,applications,DIRECT
@@ -137,54 +124,16 @@ proxy-groups:
       - 日本节点
       - 新加坡节点
       - 韩国节点
-  - name: steam
-    type: select
-    proxies:
-      - 全球直连
-      - 香港节点
-      - 台湾节点
-      - 日本节点
-      - 新加坡节点
-      - 美国节点
-      - 韩国节点
-  - name: github
-    type: select
-    proxies:
-      - 香港节点
-      - 台湾节点
-      - 日本节点
-      - 新加坡节点
-      - 美国节点
-      - 韩国节点
-  - name: apple
-    type: select
-    proxies:
-      - 全球直连
-      - 香港节点
-      - 台湾节点
-      - 日本节点
-      - 新加坡节点
-      - 美国节点
-      - 韩国节点
-  - name: 谷歌服务
-    type: select
-    proxies:
-      - 香港节点
-      - 台湾节点
-      - 日本节点
-      - 新加坡节点
-      - 美国节点
-      - 韩国节点
   - name: 漏网之鱼
     type: select
     proxies:
-      - 全球直连
       - 香港节点
       - 台湾节点
       - 日本节点
       - 新加坡节点
       - 美国节点
       - 韩国节点
+      - DIRECT
   - name: 香港节点
     type: url-test
     include-all-proxies: true
@@ -227,7 +176,3 @@ proxy-groups:
     url: https://cp.cloudflare.com/generate_204
     interval: 300
     tolerance: 50
-  - name: 全球直连
-    type: select
-    proxies:
-      - DIRECT
