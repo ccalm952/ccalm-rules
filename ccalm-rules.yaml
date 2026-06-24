@@ -1,37 +1,37 @@
-# 运行时状态持久化（写入配置目�?cache.db，删除该文件可清空缓存）
+# 运行时状态持久化（写入配置目录 cache.db，删除该文件可清空缓存）
 profile:
-  store-selected: true   # 重启后保留各策略组手动选中的节�?
-  store-fake-ip: true    # 重启后保�?fake-IP 与域名的映射，减少长连接中断
+  store-selected: true   # 重启后保留各策略组手动选中的节点
+  store-fake-ip: true    # 重启后保留 fake-IP 与域名的映射，减少长连接中断
 
-mode: rule   # �?rules 分流；可�?global（全局代理�? direct（全局直连�?
+mode: rule   # 按 rules 分流；可选 global（全局代理）/ direct（全局直连）
 
 # DNS：https://wiki.metacubex.one/config/dns/
 dns:
   enable: true
-  ipv6: false                    # 不解�?返回 AAAA，国内环境更稳，避免 IPv6 绕路
-  enhanced-mode: fake-ip         # �?IP 模式：先给应用假地址，再由内核按域名规则转发（Verge 主流�?
-  fake-ip-range: 198.18.0.1/16   # �?IP 地址池（保留网段，勿与局域网冲突�?
-  fake-ip-filter-mode: blacklist # 黑名单：命中列表的域名返回真�?IP，其余走 fake-ip
+  ipv6: false                    # 不解析/返回 AAAA，国内环境更稳，避免 IPv6 绕路
+  enhanced-mode: fake-ip         # 假 IP 模式：先给应用假地址，再由内核按域名规则转发（Verge 主流）
+  fake-ip-range: 198.18.0.1/16   # 假 IP 地址池（保留网段，勿与局域网冲突）
+  fake-ip-filter-mode: blacklist # 黑名单：命中列表的域名返回真实 IP，其余走 fake-ip
   fake-ip-filter:
-    - rule-set:fakeip-filter      # 远程规则集，见下�?rule-providers.fakeip-filter
-  # 引导 DNS：必须为�?IP，用于解�?nameserver �?DoH 域名的地址
+    - rule-set:fakeip-filter      # 远程规则集，见下方 rule-providers.fakeip-filter
+  # 引导 DNS：必须为纯 IP，用于解析 nameserver 里 DoH 域名的地址
   default-nameserver:
     - 119.29.29.29   # 腾讯 DNSPod
     - 223.5.5.5      # 阿里 DNS
-  # �?DNS：未命中 nameserver-policy 的域名走这里
+  # 主 DNS：未命中 nameserver-policy 的域名走这里
   nameserver:
     - https://doh.pub/dns-query          # PubDNS 公共 DNS
     - https://dns.alidns.com/dns-query   # 阿里 AliDNS
-  # 仅用于解析订阅中代理节点的域名，�?nameserver-policy 互不干扰
+  # 仅用于解析订阅中代理节点的域名，与 nameserver-policy 互不干扰
   proxy-server-nameserver:
     - https://doh.pub/dns-query
     - https://dns.alidns.com/dns-query
-  # 指定域名使用独立 DNS（优先级高于 nameserver�?
+  # 指定域名使用独立 DNS（优先级高于 nameserver）
   nameserver-policy:
-    '+.jiandaoyun.com':   # 简道云：内�?定制 DoH
+    '+.jiandaoyun.com':
       - https://doh.dohcore.com:2096/dns-query/1c4a98b7-b0d6-4780-9f75-a2f9c9634983#skip-cert-verify=true
       - https://doh.cloudflare-lab.com:2096/dns-query/1c4a98b7-b0d6-4780-9f75-a2f9c9634983#skip-cert-verify=true
-    '+.quandao.com':      # 圈道：内�?定制 DoH
+    '+.quandao.com':
       - https://doh.dohcore.com:2096/dns-query/1c4a98b7-b0d6-4780-9f75-a2f9c9634983#skip-cert-verify=true
       - https://doh.cloudflare-lab.com:2096/dns-query/1c4a98b7-b0d6-4780-9f75-a2f9c9634983#skip-cert-verify=true
 
@@ -39,7 +39,7 @@ dns:
 # 参考：https://github.com/ACL4SSR/ACL4SSR/blob/master/Clash/config/ACL4SSR_Online_Full.ini
 
 rule-providers:
-  # fake-ip 过滤（ShellCrash 维护，每�?interval 自动更新�?
+  # fake-ip 过滤（ShellCrash 维护，每日 interval 自动更新）
   fakeip-filter:
     type: http
     behavior: domain
@@ -113,13 +113,14 @@ rule-providers:
     interval: 86400
 
 rules:
-  # 自定义（�?rules-web/ 管理页维护）
-  # 自定义直�?
+  # 自定义（由 rules-web/ 管理页维护）
+  # 自定义直连
   - DOMAIN-SUFFIX,ccalm.xyz,DIRECT
 
-  # 自定义代�?
+  # 自定义代理
   - DOMAIN-SUFFIX,store.bblcdn.com,香港节点
   - DOMAIN-SUFFIX,iyf.tv,香港节点
+
   # ACL4SSR
   - RULE-SET,lan,DIRECT
   - RULE-SET,google-cn,DIRECT
