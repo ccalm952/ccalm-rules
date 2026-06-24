@@ -22,10 +22,8 @@ dns:
   nameserver:
     - https://doh.pub/dns-query          # PubDNS 公共 DNS
     - https://dns.alidns.com/dns-query   # 阿里 AliDNS
-  # 仅用于解析订阅中代理节点的域名
-  proxy-server-nameserver:
-    - https://doh.pub/dns-query
-    - https://dns.alidns.com/dns-query
+  # 勿配置 proxy-server-nameserver：一旦设置，节点域名只走该列表，不会命中
+  # nameserver-policy（Sub-Store 注入的简道云/圈道 DoH），内网节点会解析超时
 
 # ACL4SSR Online Full
 # 参考：https://github.com/ACL4SSR/ACL4SSR/blob/master/Clash/config/ACL4SSR_Online_Full.ini
