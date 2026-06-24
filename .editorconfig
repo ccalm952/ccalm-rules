@@ -2,6 +2,9 @@
 
 root = true
 
+[*]
+charset = utf-8
+
 [*.{yaml,yml}]                      # 仅 yaml / yml
 indent_style = space                # 空格缩进
 indent_size = 2                     # 每级 2 空格
