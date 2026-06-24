@@ -26,14 +26,14 @@ dns:
   proxy-server-nameserver:
     - https://doh.pub/dns-query
     - https://dns.alidns.com/dns-query
-  # 指定域名使用独立 DNS（优先级高于 nameserver）
+  # 指定域名使用独立 DNS（优先级高于 nameserver；DoH 含 # 参数时必须加引号）
   nameserver-policy:
     '+.jiandaoyun.com':
-      - https://doh.dohcore.com:2096/dns-query/1c4a98b7-b0d6-4780-9f75-a2f9c9634983#skip-cert-verify=true
-      - https://doh.cloudflare-lab.com:2096/dns-query/1c4a98b7-b0d6-4780-9f75-a2f9c9634983#skip-cert-verify=true
+      - 'https://doh.dohcore.com:2096/dns-query/1c4a98b7-b0d6-4780-9f75-a2f9c9634983#skip-cert-verify=true'
+      - 'https://doh.cloudflare-lab.com:2096/dns-query/1c4a98b7-b0d6-4780-9f75-a2f9c9634983#skip-cert-verify=true'
     '+.quandao.com':
-      - https://doh.dohcore.com:2096/dns-query/1c4a98b7-b0d6-4780-9f75-a2f9c9634983#skip-cert-verify=true
-      - https://doh.cloudflare-lab.com:2096/dns-query/1c4a98b7-b0d6-4780-9f75-a2f9c9634983#skip-cert-verify=true
+      - 'https://doh.dohcore.com:2096/dns-query/1c4a98b7-b0d6-4780-9f75-a2f9c9634983#skip-cert-verify=true'
+      - 'https://doh.cloudflare-lab.com:2096/dns-query/1c4a98b7-b0d6-4780-9f75-a2f9c9634983#skip-cert-verify=true'
 
 # ACL4SSR Online Full
 # 参考：https://github.com/ACL4SSR/ACL4SSR/blob/master/Clash/config/ACL4SSR_Online_Full.ini
