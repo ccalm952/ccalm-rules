@@ -18,22 +18,14 @@ dns:
   default-nameserver:
     - 119.29.29.29   # 腾讯 DNSPod
     - 223.5.5.5      # 阿里 DNS
-  # 主 DNS：未命中 nameserver-policy 的域名走这里
+  # 主 DNS
   nameserver:
     - https://doh.pub/dns-query          # PubDNS 公共 DNS
     - https://dns.alidns.com/dns-query   # 阿里 AliDNS
-  # 仅用于解析订阅中代理节点的域名，与 nameserver-policy 互不干扰
+  # 仅用于解析订阅中代理节点的域名
   proxy-server-nameserver:
     - https://doh.pub/dns-query
     - https://dns.alidns.com/dns-query
-  # 指定域名使用独立 DNS（优先级高于 nameserver；DoH 含 # 参数时必须加引号）
-  nameserver-policy:
-    '+.jiandaoyun.com':
-      - 'https://doh.dohcore.com:2096/dns-query/1c4a98b7-b0d6-4780-9f75-a2f9c9634983#skip-cert-verify=true'
-      - 'https://doh.cloudflare-lab.com:2096/dns-query/1c4a98b7-b0d6-4780-9f75-a2f9c9634983#skip-cert-verify=true'
-    '+.quandao.com':
-      - 'https://doh.dohcore.com:2096/dns-query/1c4a98b7-b0d6-4780-9f75-a2f9c9634983#skip-cert-verify=true'
-      - 'https://doh.cloudflare-lab.com:2096/dns-query/1c4a98b7-b0d6-4780-9f75-a2f9c9634983#skip-cert-verify=true'
 
 # ACL4SSR Online Full
 # 参考：https://github.com/ACL4SSR/ACL4SSR/blob/master/Clash/config/ACL4SSR_Online_Full.ini
