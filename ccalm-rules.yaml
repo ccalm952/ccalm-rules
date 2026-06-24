@@ -1,29 +1,24 @@
-# 运行时状态持久化（写入配置目录 cache.db，删除该文件可清空缓存）
+# 状态持久化 → cache.db
 profile:
-  store-selected: true   # 重启后保留各策略组手动选中的节点
-  store-fake-ip: true    # 重启后保留 fake-IP 与域名的映射，减少长连接中断
+  store-selected: true   # 保留策略组选中节点
+  store-fake-ip: true    # 保留 fake-IP 映射
 
-mode: rule   # 按 rules 分流；可选 global（全局代理）/ direct（全局直连）
+mode: rule
 
-# DNS：https://wiki.metacubex.one/config/dns/
 dns:
   enable: true
-  ipv6: false                    # 不解析/返回 AAAA，国内环境更稳，避免 IPv6 绕路
-  enhanced-mode: fake-ip         # 假 IP 模式：先给应用假地址，再由内核按域名规则转发（Verge 主流）
-  fake-ip-range: 198.18.0.1/16   # 假 IP 地址池（保留网段，勿与局域网冲突）
-  fake-ip-filter-mode: blacklist # 黑名单：命中列表的域名返回真实 IP，其余走 fake-ip
+  ipv6: false
+  enhanced-mode: fake-ip
+  fake-ip-range: 198.18.0.1/16
+  fake-ip-filter-mode: blacklist
   fake-ip-filter:
-    - rule-set:fakeip-filter      # 远程规则集，见下方 rule-providers.fakeip-filter
-  # 引导 DNS：必须为纯 IP，用于解析 nameserver 里 DoH 域名的地址
-  default-nameserver:
-    - 119.29.29.29   # 腾讯 DNSPod
-    - 223.5.5.5      # 阿里 DNS
-  # 主 DNS
+    - rule-set:fakeip-filter
+  default-nameserver:   # 纯 IP，引导解析 DoH 域名
+    - 119.29.29.29
+    - 223.5.5.5
   nameserver:
-    - https://doh.pub/dns-query          # PubDNS 公共 DNS
-    - https://dns.alidns.com/dns-query   # 阿里 AliDNS
-  # 勿配置 proxy-server-nameserver：一旦设置，节点域名只走该列表，不会命中
-  # nameserver-policy（Sub-Store 注入的简道云/圈道 DoH），内网节点会解析超时
+    - https://doh.pub/dns-query
+    - https://dns.alidns.com/dns-query
 
 # ACL4SSR Online Full
 # 参考：https://github.com/ACL4SSR/ACL4SSR/blob/master/Clash/config/ACL4SSR_Online_Full.ini
