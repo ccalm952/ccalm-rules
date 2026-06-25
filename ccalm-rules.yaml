@@ -101,11 +101,11 @@ rules:
   # 自定义（由 rules-web/ 管理页维护）
   # 自定义直连
   - DOMAIN-SUFFIX,ccalm.xyz,DIRECT
+  - DOMAIN-SUFFIX,lichidental.com,DIRECT
 
   # 自定义代理
   - DOMAIN-SUFFIX,store.bblcdn.com,香港节点
   - DOMAIN-SUFFIX,iyf.tv,香港节点
-
   # ACL4SSR
   - RULE-SET,lan,DIRECT
   - RULE-SET,google-cn,DIRECT
