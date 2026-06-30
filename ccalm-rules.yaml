@@ -102,6 +102,7 @@ rules:
   # 自定义直连
   - DOMAIN-SUFFIX,ccalm.xyz,DIRECT
   - DOMAIN-SUFFIX,lichidental.com,DIRECT
+  - DOMAIN-SUFFIX,yutoons.com,DIRECT
 
   # 自定义代理
   - DOMAIN-SUFFIX,store.bblcdn.com,香港节点
