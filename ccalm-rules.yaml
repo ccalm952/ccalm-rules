@@ -103,6 +103,7 @@ rules:
   - DOMAIN-SUFFIX,ccalm.xyz,DIRECT
   - DOMAIN-SUFFIX,lichidental.com,DIRECT
   - DOMAIN-SUFFIX,yutoons.com,DIRECT
+  - DOMAIN-SUFFIX,mmm920.com,DIRECT
 
   # 自定义代理
   - DOMAIN-SUFFIX,store.bblcdn.com,香港节点
