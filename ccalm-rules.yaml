@@ -13,6 +13,11 @@ dns:
   fake-ip-filter-mode: blacklist
   fake-ip-filter:
     - rule-set:fakeip-filter
+    # 自建服务：走真实 IP，避免 Fake-IP 导致面板/订阅 HTTPS 异常
+    - '+.ccalm.xyz'
+    - '+.lichidental.com'
+    - '+.yutoons.com'
+    - '+.mmm920.com'
   default-nameserver:   # 纯 IP，引导解析 DoH 域名
     - 119.29.29.29
     - 223.5.5.5
