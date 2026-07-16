@@ -3,6 +3,7 @@ import { StickyNote, Pin, Plus, RefreshCw, Save, Search } from "lucide-react";
 import { toast } from "sonner";
 import { DeleteConfirmButton } from "@/components/DeleteConfirmButton";
 import { MemoFieldCopyList } from "@/components/MemoFieldCopyList";
+import { MemoMarkdown } from "@/components/MemoMarkdown";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -17,6 +18,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Spinner } from "@/components/ui/spinner";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import {
   createMemo,
@@ -76,6 +78,7 @@ export function MemosEditor({ password }: MemosEditorProps) {
   const [query, setQuery] = useState("");
   const [selectedId, setSelectedId] = useState<number | "new" | null>(null);
   const [draft, setDraft] = useState<Draft>(emptyDraft);
+  const [contentMode, setContentMode] = useState<"edit" | "preview">("edit");
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -125,6 +128,7 @@ export function MemosEditor({ password }: MemosEditorProps) {
   function startCreate() {
     setSelectedId("new");
     setDraft(emptyDraft);
+    setContentMode("edit");
   }
 
   async function handleSave() {
@@ -193,7 +197,7 @@ export function MemosEditor({ password }: MemosEditorProps) {
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">备忘录</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            本地 SQLite 存储；正文写成「标签 内容」可一键复制
+            支持 Markdown 标题/正文/代码块；代码块可一键复制
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -240,7 +244,10 @@ export function MemosEditor({ password }: MemosEditorProps) {
                 <button
                   key={memo.id}
                   type="button"
-                  onClick={() => setSelectedId(memo.id)}
+                  onClick={() => {
+                    setSelectedId(memo.id);
+                    setContentMode("preview");
+                  }}
                   className={cn(
                     "w-full rounded-lg border px-3 py-2.5 text-left transition-colors",
                     selectedId === memo.id
@@ -283,7 +290,7 @@ export function MemosEditor({ password }: MemosEditorProps) {
               <div>
                 <CardTitle>{selectedId === "new" ? "新建备忘录" : "编辑备忘录"}</CardTitle>
                 <CardDescription>
-                  每行可用「账号 xxx」或「服务器：https://…」格式，下方可快速复制
+                  支持 Markdown 标题、正文；用三个反引号包住代码块，预览时可一键复制
                 </CardDescription>
               </div>
               {typeof selectedId === "number" ? (
@@ -330,14 +337,37 @@ export function MemosEditor({ password }: MemosEditorProps) {
                 </div>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="memo-content">正文</Label>
-                <Textarea
-                  id="memo-content"
-                  placeholder={"服务器 https://www.example.com/\n账号 user@example.com\n密码 ******"}
-                  className="min-h-56 font-mono text-sm"
-                  value={draft.content}
-                  onChange={(e) => setDraft((prev) => ({ ...prev, content: e.target.value }))}
-                />
+                <div className="flex items-center justify-between gap-2">
+                  <Label htmlFor="memo-content">正文</Label>
+                  <Tabs
+                    value={contentMode}
+                    onValueChange={(value) => setContentMode(value as "edit" | "preview")}
+                  >
+                    <TabsList className="h-8">
+                      <TabsTrigger value="edit" className="px-2.5 text-xs">
+                        编辑
+                      </TabsTrigger>
+                      <TabsTrigger value="preview" className="px-2.5 text-xs">
+                        预览
+                      </TabsTrigger>
+                    </TabsList>
+                  </Tabs>
+                </div>
+                {contentMode === "edit" ? (
+                  <Textarea
+                    id="memo-content"
+                    placeholder={
+                      "# RackNerd\n\n服务器信息如下：\n\n服务器 https://www.example.com/\n账号 user@example.com\n\n## 命令\n\n```bash\ndocker ps\n```"
+                    }
+                    className="min-h-64 font-mono text-sm"
+                    value={draft.content}
+                    onChange={(e) => setDraft((prev) => ({ ...prev, content: e.target.value }))}
+                  />
+                ) : (
+                  <div className="min-h-64 rounded-md border bg-background p-3">
+                    <MemoMarkdown content={draft.content} />
+                  </div>
+                )}
               </div>
               <MemoFieldCopyList fields={copyFields} />
               {selectedId === "new" ? (
