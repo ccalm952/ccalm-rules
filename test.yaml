@@ -58,6 +58,14 @@ rule-providers:
     path: ./ruleset/acl4ssr/steam-cn.yaml
     interval: 86400
 
+  microsoft:
+    type: http
+    behavior: classical
+    format: yaml
+    url: "https://cdn.jsdelivr.net/gh/ACL4SSR/ACL4SSR@master/Clash/Providers/Ruleset/Microsoft.yaml"
+    path: ./ruleset/acl4ssr/microsoft.yaml
+    interval: 86400
+
   ai:
     type: http
     behavior: classical
@@ -113,6 +121,7 @@ rules:
   - RULE-SET,lan,DIRECT
   - RULE-SET,google-cn,DIRECT
   - RULE-SET,steam-cn,DIRECT
+  - RULE-SET,microsoft,微软服务
   - RULE-SET,ai,AI
   - RULE-SET,proxy-media,国外媒体
   - RULE-SET,proxy-gfwlist,手动选择
@@ -127,6 +136,13 @@ proxy-groups:
     proxies:
       - 香港节点
       - 美国节点
+  - name: 微软服务
+    type: select
+    proxies:
+      - DIRECT
+      - 香港节点
+      - 美国节点
+      - 手动选择
   - name: AI
     type: select
     proxies:
