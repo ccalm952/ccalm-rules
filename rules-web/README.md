@@ -30,13 +30,22 @@ Vite 会把 `/api` 代理到 `127.0.0.1:3001`，一般无需配置 `VITE_API_BAS
 
 ## 部署
 
+生产路径：
+
+| 项 | 路径 |
+|----|------|
+| 仓库 | `/opt/ccalm-rules` |
+| 站点目录 | `/opt/1panel/www/sites/rules.ccalm.xyz/index` |
+
 ```bash
-cd rules-web
-# .env.production: VITE_API_BASE=https://你的域名/api
+cd /opt/ccalm-rules/rules-web
+# .env.production: VITE_API_BASE=https://rules.ccalm.xyz/api
+npm install
 npm run build
+rsync -a --delete dist/ /opt/1panel/www/sites/rules.ccalm.xyz/index/
 ```
 
-静态站点部署 `rules-web/dist`；API 用 PM2 + Nginx 反代，见 [rules-api/README.md](../rules-api/README.md)。
+完整「拉代码 → API 迁移/重启 → 前端发布」见仓库根 [README.md](../README.md#服务器更新)。API 细节见 [rules-api/README.md](../rules-api/README.md)。
 
 ## shadcn 组件
 
