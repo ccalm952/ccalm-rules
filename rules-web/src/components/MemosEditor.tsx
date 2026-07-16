@@ -3,6 +3,7 @@ import { StickyNote, Pin, Plus, RefreshCw, Save, Search } from "lucide-react";
 import { toast } from "sonner";
 import { DeleteConfirmButton } from "@/components/DeleteConfirmButton";
 import { MemoMarkdown } from "@/components/MemoMarkdown";
+import { MemoPasswordGenerator } from "@/components/MemoPasswordGenerator";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -127,6 +128,16 @@ export function MemosEditor({ password }: MemosEditorProps) {
     setSelectedId("new");
     setDraft(emptyDraft);
     setContentMode("edit");
+  }
+
+  function insertPassword(password: string) {
+    const chunk = `密码 \`\`${password}\`\``;
+    setContentMode("edit");
+    setDraft((prev) => {
+      const base = prev.content.trimEnd();
+      const next = base ? `${base}\n${chunk}` : chunk;
+      return { ...prev, content: next };
+    });
   }
 
   async function handleSave() {
@@ -365,6 +376,7 @@ export function MemosEditor({ password }: MemosEditorProps) {
                   </div>
                 )}
               </div>
+              <MemoPasswordGenerator onInsert={insertPassword} />
               {selectedId === "new" ? (
                 <label className="flex items-center gap-2 text-sm">
                   <input
