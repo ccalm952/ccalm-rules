@@ -1,0 +1,160 @@
+# 状态持久化 → cache.db
+profile:
+  store-selected: true   # 保留策略组选中节点
+  store-fake-ip: true    # 保留 fake-IP 映射
+
+mode: rule
+
+dns:
+  enable: true
+  ipv6: false
+  enhanced-mode: fake-ip
+  fake-ip-range: 198.18.0.1/16
+  fake-ip-filter-mode: blacklist
+  fake-ip-filter:
+    - rule-set:fakeip-filter
+  default-nameserver:   # 纯 IP，引导解析 DoH 域名
+    - 119.29.29.29
+    - 223.5.5.5
+  nameserver:
+    - https://doh.pub/dns-query
+    - https://dns.alidns.com/dns-query
+
+# ACL4SSR Online Full
+# 参考：https://github.com/ACL4SSR/ACL4SSR/blob/master/Clash/config/ACL4SSR_Online_Full.ini
+
+rule-providers:
+  # fake-ip 过滤（ShellCrash 维护，每日 interval 自动更新）
+  fakeip-filter:
+    type: http
+    behavior: domain
+    format: text
+    url: "https://raw.githubusercontent.com/juewuy/ShellCrash/dev/public/fake_ip_filter.list"
+    path: ./ruleset/fakeip-filter.list
+    interval: 86400
+
+  lan:
+    type: http
+    behavior: classical
+    format: yaml
+    url: "https://cdn.jsdelivr.net/gh/ACL4SSR/ACL4SSR@master/Clash/Providers/LocalAreaNetwork.yaml"
+    path: ./ruleset/acl4ssr/lan.yaml
+    interval: 86400
+
+  google-cn:
+    type: http
+    behavior: classical
+    format: text
+    url: "https://cdn.jsdelivr.net/gh/ACL4SSR/ACL4SSR@master/Clash/GoogleCN.list"
+    path: ./ruleset/acl4ssr/google-cn.list
+    interval: 86400
+
+  steam-cn:
+    type: http
+    behavior: classical
+    format: yaml
+    url: "https://cdn.jsdelivr.net/gh/ACL4SSR/ACL4SSR@master/Clash/Providers/Ruleset/SteamCN.yaml"
+    path: ./ruleset/acl4ssr/steam-cn.yaml
+    interval: 86400
+
+  ai:
+    type: http
+    behavior: classical
+    format: yaml
+    url: "https://cdn.jsdelivr.net/gh/ACL4SSR/ACL4SSR@master/Clash/Providers/Ruleset/AI.yaml"
+    path: ./ruleset/acl4ssr/ai.yaml
+    interval: 86400
+
+  proxy-media:
+    type: http
+    behavior: classical
+    format: yaml
+    url: "https://cdn.jsdelivr.net/gh/ACL4SSR/ACL4SSR@master/Clash/Providers/ProxyMedia.yaml"
+    path: ./ruleset/acl4ssr/proxy-media.yaml
+    interval: 86400
+
+  proxy-gfwlist:
+    type: http
+    behavior: classical
+    format: yaml
+    url: "https://cdn.jsdelivr.net/gh/ACL4SSR/ACL4SSR@master/Clash/Providers/ProxyGFWlist.yaml"
+    path: ./ruleset/acl4ssr/proxy-gfwlist.yaml
+    interval: 86400
+
+  china-domain:
+    type: http
+    behavior: classical
+    format: yaml
+    url: "https://cdn.jsdelivr.net/gh/ACL4SSR/ACL4SSR@master/Clash/Providers/ChinaDomain.yaml"
+    path: ./ruleset/acl4ssr/china-domain.yaml
+    interval: 86400
+
+  china-company-ip:
+    type: http
+    behavior: ipcidr
+    format: yaml
+    url: "https://cdn.jsdelivr.net/gh/ACL4SSR/ACL4SSR@master/Clash/Providers/ChinaCompanyIp.yaml"
+    path: ./ruleset/acl4ssr/china-company-ip.yaml
+    interval: 86400
+
+rules:
+  # 自定义（由 rules-web/ 管理页维护）
+  # 自定义直连
+  - DOMAIN-SUFFIX,ccalm.xyz,DIRECT
+  - DOMAIN-SUFFIX,lichidental.com,DIRECT
+  - DOMAIN-SUFFIX,yutoons.com,DIRECT
+  - DOMAIN-SUFFIX,mmm920.com,DIRECT
+
+  # 自定义代理
+  - DOMAIN-SUFFIX,store.bblcdn.com,香港节点
+  - DOMAIN-SUFFIX,iyf.tv,香港节点
+  # ACL4SSR
+  - RULE-SET,lan,DIRECT
+  - RULE-SET,google-cn,DIRECT
+  - RULE-SET,steam-cn,DIRECT
+  - RULE-SET,ai,AI
+  - RULE-SET,proxy-media,国外媒体
+  - RULE-SET,proxy-gfwlist,手动选择
+  - RULE-SET,china-domain,DIRECT
+  - RULE-SET,china-company-ip,DIRECT,no-resolve
+  - GEOIP,CN,DIRECT,no-resolve
+  - MATCH,漏网之鱼
+
+proxy-groups:
+  - name: 手动选择
+    type: select
+    proxies:
+      - 香港节点
+      - 美国节点
+  - name: AI
+    type: select
+    proxies:
+      - 美国节点
+      - 香港节点
+      - DIRECT
+  - name: 国外媒体
+    type: select
+    proxies:
+      - 香港节点
+      - 美国节点
+      - DIRECT
+  - name: 漏网之鱼
+    type: select
+    proxies:
+      - DIRECT
+      - 香港节点
+      - 美国节点
+  - name: 香港节点
+    type: url-test
+    include-all-proxies: true
+    filter: '香港'
+    url: https://cp.cloudflare.com/generate_204
+    interval: 300
+    tolerance: 50
+  - name: 美国节点
+    type: url-test
+    include-all-proxies: true
+    filter: '美国'
+    url: https://cp.cloudflare.com/generate_204
+    interval: 300
+    tolerance: 50
