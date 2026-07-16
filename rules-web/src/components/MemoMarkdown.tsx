@@ -1,10 +1,14 @@
-import { isValidElement, useState, type ReactNode } from "react";
+import { isValidElement, useMemo, useState, type ReactNode } from "react";
 import { Check, Copy } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { copyText } from "@/lib/memo-fields";
+import {
+  copyText,
+  markCopyableDoubleBackticks,
+  splitCopyableInlineCode,
+} from "@/lib/memo-fields";
 import { cn } from "@/lib/utils";
 
 interface MemoMarkdownProps {
@@ -56,9 +60,8 @@ function CodeBlock({ children }: { children?: ReactNode }) {
   );
 }
 
-function InlineCode({ children }: { children?: ReactNode }) {
+function InlineCodeCopyable({ text }: { text: string }) {
   const [copied, setCopied] = useState(false);
-  const text = getNodeText(children);
 
   async function handleCopy() {
     try {
@@ -83,7 +86,7 @@ function InlineCode({ children }: { children?: ReactNode }) {
         "transition-colors hover:border-ring hover:bg-accent",
       )}
     >
-      <span className="min-w-0 truncate">{children}</span>
+      <span className="min-w-0 truncate">{text}</span>
       <span className="inline-flex shrink-0 text-muted-foreground group-hover/inline-code:text-foreground">
         {copied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
       </span>
@@ -92,6 +95,8 @@ function InlineCode({ children }: { children?: ReactNode }) {
 }
 
 export function MemoMarkdown({ content, className }: MemoMarkdownProps) {
+  const rendered = useMemo(() => markCopyableDoubleBackticks(content), [content]);
+
   if (!content.trim()) {
     return <p className="text-sm text-muted-foreground">（无正文）</p>;
   }
@@ -111,6 +116,7 @@ export function MemoMarkdown({ content, className }: MemoMarkdownProps) {
         "[&_a]:text-primary [&_a]:underline-offset-2 hover:[&_a]:underline",
         "[&_blockquote]:my-2 [&_blockquote]:border-l-2 [&_blockquote]:border-border [&_blockquote]:pl-3 [&_blockquote]:text-muted-foreground",
         "[&_hr]:my-4 [&_hr]:border-border",
+        "[&_code]:rounded [&_code]:bg-muted [&_code]:px-1 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-[0.85em]",
         "[&_pre_code]:rounded-none [&_pre_code]:border-0 [&_pre_code]:bg-transparent [&_pre_code]:p-0 [&_pre_code]:font-mono [&_pre_code]:text-[0.85em]",
         "[&_table]:my-3 [&_table]:w-full [&_table]:border-collapse [&_table]:text-left",
         "[&_th]:border [&_th]:border-border [&_th]:bg-muted/40 [&_th]:px-2 [&_th]:py-1",
@@ -128,11 +134,17 @@ export function MemoMarkdown({ content, className }: MemoMarkdownProps) {
             if (isBlock) {
               return <code className={className}>{children}</code>;
             }
-            return <InlineCode>{children}</InlineCode>;
+
+            const raw = getNodeText(children);
+            const { copyable, text } = splitCopyableInlineCode(raw);
+            if (copyable) {
+              return <InlineCodeCopyable text={text} />;
+            }
+            return <code>{text}</code>;
           },
         }}
       >
-        {content}
+        {rendered}
       </ReactMarkdown>
     </div>
   );
