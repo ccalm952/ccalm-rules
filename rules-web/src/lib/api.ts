@@ -92,3 +92,53 @@ export async function deleteBookmark(password: string, id: number): Promise<void
   });
   if (!res.ok) throw new Error(await parseError(res));
 }
+
+export interface Memo {
+  id: number;
+  title: string;
+  content: string;
+  category: string;
+  pinned: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type MemoInput = Pick<Memo, "title" | "content" | "category" | "pinned">;
+
+export async function fetchMemos(password: string): Promise<Memo[]> {
+  const res = await fetch(`${API_BASE}/memos`, { headers: headers(password) });
+  if (!res.ok) throw new Error(await parseError(res));
+  return res.json() as Promise<Memo[]>;
+}
+
+export async function createMemo(password: string, data: MemoInput): Promise<Memo> {
+  const res = await fetch(`${API_BASE}/memos`, {
+    method: "POST",
+    headers: headers(password),
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) throw new Error(await parseError(res));
+  return res.json() as Promise<Memo>;
+}
+
+export async function updateMemo(
+  password: string,
+  id: number,
+  data: Partial<MemoInput>,
+): Promise<Memo> {
+  const res = await fetch(`${API_BASE}/memos/${id}`, {
+    method: "PUT",
+    headers: headers(password),
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) throw new Error(await parseError(res));
+  return res.json() as Promise<Memo>;
+}
+
+export async function deleteMemo(password: string, id: number): Promise<void> {
+  const res = await fetch(`${API_BASE}/memos/${id}`, {
+    method: "DELETE",
+    headers: headers(password),
+  });
+  if (!res.ok) throw new Error(await parseError(res));
+}

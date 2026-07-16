@@ -10,6 +10,7 @@ Express 5 + Prisma 7 + SQLite 后端，供 `rules-web/` 管理页调用。
 | `GET /api/rules` | 从 GitHub 读取 `ccalm-rules.yaml` 自定义段 |
 | `PUT /api/rules` | 写回 GitHub |
 | `GET/POST/PUT/DELETE /api/bookmarks` | 常用网址（SQLite） |
+| `GET/POST/PUT/DELETE /api/memos` | 备忘录（SQLite：标题/正文/分类/置顶） |
 
 所有接口需在请求头携带 `X-Admin-Password`。
 

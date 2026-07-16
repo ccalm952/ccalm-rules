@@ -19,3 +19,15 @@ model Bookmark {
 
   @@map("bookmarks")
 }
+
+model Memo {
+  id        Int      @id @default(autoincrement())
+  title     String
+  content   String   @default("")
+  category  String   @default("")
+  pinned    Boolean  @default(false)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("memos")
+}

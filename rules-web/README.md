@@ -1,6 +1,6 @@
 # Clash 规则管理页（rules-web）
 
-Vite + React + Tailwind + shadcn/ui 前端，配合 [rules-api/](../rules-api/)（Express + Prisma + SQLite）管理 Clash 规则与常用网址。
+Vite + React + Tailwind + shadcn/ui 前端，配合 [rules-api/](../rules-api/)（Express + Prisma + SQLite）管理 Clash 规则、常用网址与备忘录。
 
 ## 架构
 
