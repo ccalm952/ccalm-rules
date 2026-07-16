@@ -2,7 +2,6 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { StickyNote, Pin, Plus, RefreshCw, Save, Search } from "lucide-react";
 import { toast } from "sonner";
 import { DeleteConfirmButton } from "@/components/DeleteConfirmButton";
-import { MemoFieldCopyList } from "@/components/MemoFieldCopyList";
 import { MemoMarkdown } from "@/components/MemoMarkdown";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -27,7 +26,6 @@ import {
   updateMemo,
   type Memo,
 } from "@/lib/api";
-import { parseMemoFields } from "@/lib/memo-fields";
 import { cn } from "@/lib/utils";
 
 interface MemosEditorProps {
@@ -188,8 +186,6 @@ export function MemosEditor({ password }: MemosEditorProps) {
   }
 
   const showEditor = selectedId !== null;
-
-  const copyFields = useMemo(() => parseMemoFields(draft.content), [draft.content]);
 
   return (
     <div className="mx-auto max-w-5xl space-y-6 p-4 pb-12">
@@ -369,7 +365,6 @@ export function MemosEditor({ password }: MemosEditorProps) {
                   </div>
                 )}
               </div>
-              <MemoFieldCopyList fields={copyFields} />
               {selectedId === "new" ? (
                 <label className="flex items-center gap-2 text-sm">
                   <input
