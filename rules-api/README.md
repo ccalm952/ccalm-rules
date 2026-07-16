@@ -48,17 +48,17 @@ npm run dev            # 自动 migrate deploy + 启动，http://127.0.0.1:3001
 
 ## 生产部署
 
-本机约定：仓库 `/opt/ccalm-rules`，前端站点 `/opt/1panel/www/sites/rules.ccalm.xyz/index`，进程名 `rules-api`（PM2）。
+本机约定：仓库 `/opt/ccalm-rules`，前端站点 `/opt/1panel/www/sites/rules.ccalm.xyz/index`，进程名 `rules-api`（PM2），端口 `3002`。
 
 完整更新指令见仓库根 [README.md](../README.md#服务器更新)。摘要：
 
 1. `cd /opt/ccalm-rules && git pull origin main`
 2. `cd rules-api && npm install && npx prisma migrate deploy && npm run build && pm2 restart rules-api`
 3. `cd ../rules-web && npm install && npm run build && rsync -a --delete dist/ /opt/1panel/www/sites/rules.ccalm.xyz/index/`
-4. Nginx 反代 `/api` 到本服务（端口见 `.env`）
+4. Nginx 反代 `/api` 到 `127.0.0.1:3002`
 5. 定期备份 SQLite 文件（`DATABASE_URL` 指向的路径）
 
-若与 Sub-Store（`3001`）同机部署，请在 `.env` 设置 `PORT=3002` 等其它端口。
+`.env` 中 `PORT=3002`（Sub-Store 占用 `3001`）。
 
 ## 数据库
 
