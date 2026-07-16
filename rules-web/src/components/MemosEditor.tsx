@@ -197,7 +197,7 @@ export function MemosEditor({ password }: MemosEditorProps) {
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">备忘录</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            支持 Markdown 标题/正文/代码块；代码块可一键复制
+            Markdown：``两个反引号`` 可复制，`一个` 仅高亮；代码块右上角可复制
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -290,7 +290,7 @@ export function MemosEditor({ password }: MemosEditorProps) {
               <div>
                 <CardTitle>{selectedId === "new" ? "新建备忘录" : "编辑备忘录"}</CardTitle>
                 <CardDescription>
-                  支持 Markdown 标题、正文；用三个反引号包住代码块，预览时可一键复制
+                  ``两个反引号`` 包住可点击复制；`一个反引号` 只做行内高亮；三个反引号是代码块
                 </CardDescription>
               </div>
               {typeof selectedId === "number" ? (
@@ -357,7 +357,7 @@ export function MemosEditor({ password }: MemosEditorProps) {
                   <Textarea
                     id="memo-content"
                     placeholder={
-                      "# RackNerd\n\n服务器信息如下：\n\n服务器 https://www.example.com/\n账号 user@example.com\n\n## 命令\n\n```bash\ndocker ps\n```"
+                      "# RackNerd\n\n账号 ``user@example.com``\n密码 ``******``\n\n端口说明用 `7890` 这种仅高亮。\n\n## 命令\n\n```bash\ndocker ps\n```"
                     }
                     className="min-h-64 font-mono text-sm"
                     value={draft.content}
