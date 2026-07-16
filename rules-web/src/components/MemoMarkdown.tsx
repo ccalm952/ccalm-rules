@@ -56,6 +56,41 @@ function CodeBlock({ children }: { children?: ReactNode }) {
   );
 }
 
+function InlineCode({ children }: { children?: ReactNode }) {
+  const [copied, setCopied] = useState(false);
+  const text = getNodeText(children);
+
+  async function handleCopy() {
+    try {
+      await copyText(text);
+      setCopied(true);
+      toast.success("已复制");
+      window.setTimeout(() => setCopied(false), 1500);
+    } catch {
+      toast.error("复制失败");
+    }
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={() => void handleCopy()}
+      title="点击复制"
+      className={cn(
+        "group/inline-code mx-0.5 inline-flex max-w-full items-center gap-1 align-middle",
+        "rounded-md border border-border/70 bg-muted px-1.5 py-0.5",
+        "font-mono text-[0.85em] leading-none",
+        "transition-colors hover:border-ring hover:bg-accent",
+      )}
+    >
+      <span className="min-w-0 truncate">{children}</span>
+      <span className="inline-flex shrink-0 text-muted-foreground group-hover/inline-code:text-foreground">
+        {copied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
+      </span>
+    </button>
+  );
+}
+
 export function MemoMarkdown({ content, className }: MemoMarkdownProps) {
   if (!content.trim()) {
     return <p className="text-sm text-muted-foreground">（无正文）</p>;
@@ -76,8 +111,7 @@ export function MemoMarkdown({ content, className }: MemoMarkdownProps) {
         "[&_a]:text-primary [&_a]:underline-offset-2 hover:[&_a]:underline",
         "[&_blockquote]:my-2 [&_blockquote]:border-l-2 [&_blockquote]:border-border [&_blockquote]:pl-3 [&_blockquote]:text-muted-foreground",
         "[&_hr]:my-4 [&_hr]:border-border",
-        "[&_code]:rounded [&_code]:bg-muted [&_code]:px-1 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-[0.85em]",
-        "[&_pre_code]:bg-transparent [&_pre_code]:p-0",
+        "[&_pre_code]:rounded-none [&_pre_code]:border-0 [&_pre_code]:bg-transparent [&_pre_code]:p-0 [&_pre_code]:font-mono [&_pre_code]:text-[0.85em]",
         "[&_table]:my-3 [&_table]:w-full [&_table]:border-collapse [&_table]:text-left",
         "[&_th]:border [&_th]:border-border [&_th]:bg-muted/40 [&_th]:px-2 [&_th]:py-1",
         "[&_td]:border [&_td]:border-border [&_td]:px-2 [&_td]:py-1",
@@ -88,6 +122,14 @@ export function MemoMarkdown({ content, className }: MemoMarkdownProps) {
         remarkPlugins={[remarkGfm]}
         components={{
           pre: ({ children }) => <CodeBlock>{children}</CodeBlock>,
+          code: ({ className, children }) => {
+            const isBlock =
+              Boolean(className?.includes("language-")) || String(children).includes("\n");
+            if (isBlock) {
+              return <code className={className}>{children}</code>;
+            }
+            return <InlineCode>{children}</InlineCode>;
+          },
         }}
       >
         {content}
