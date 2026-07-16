@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { StickyNote, Pin, Plus, RefreshCw, Save, Search } from "lucide-react";
 import { toast } from "sonner";
 import { DeleteConfirmButton } from "@/components/DeleteConfirmButton";
+import { MemoFieldCopyList } from "@/components/MemoFieldCopyList";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -24,6 +25,7 @@ import {
   updateMemo,
   type Memo,
 } from "@/lib/api";
+import { parseMemoFields } from "@/lib/memo-fields";
 import { cn } from "@/lib/utils";
 
 interface MemosEditorProps {
@@ -183,13 +185,15 @@ export function MemosEditor({ password }: MemosEditorProps) {
 
   const showEditor = selectedId !== null;
 
+  const copyFields = useMemo(() => parseMemoFields(draft.content), [draft.content]);
+
   return (
     <div className="mx-auto max-w-5xl space-y-6 p-4 pb-12">
       <div className="flex flex-wrap items-start justify-between gap-4 pt-2">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">备忘录</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            本地 SQLite 存储，支持分类、置顶与搜索
+            本地 SQLite 存储；正文写成「标签 内容」可一键复制
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -278,7 +282,9 @@ export function MemosEditor({ password }: MemosEditorProps) {
             <CardHeader className="flex flex-row items-start justify-between gap-3 space-y-0">
               <div>
                 <CardTitle>{selectedId === "new" ? "新建备忘录" : "编辑备忘录"}</CardTitle>
-                <CardDescription>修改后记得点保存</CardDescription>
+                <CardDescription>
+                  每行可用「账号 xxx」或「服务器：https://…」格式，下方可快速复制
+                </CardDescription>
               </div>
               {typeof selectedId === "number" ? (
                 <div className="flex items-center gap-1">
@@ -327,12 +333,13 @@ export function MemosEditor({ password }: MemosEditorProps) {
                 <Label htmlFor="memo-content">正文</Label>
                 <Textarea
                   id="memo-content"
-                  placeholder="随便记点什么……"
+                  placeholder={"服务器 https://www.example.com/\n账号 user@example.com\n密码 ******"}
                   className="min-h-56 font-mono text-sm"
                   value={draft.content}
                   onChange={(e) => setDraft((prev) => ({ ...prev, content: e.target.value }))}
                 />
               </div>
+              <MemoFieldCopyList fields={copyFields} />
               {selectedId === "new" ? (
                 <label className="flex items-center gap-2 text-sm">
                   <input
