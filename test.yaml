@@ -123,39 +123,7 @@ rules:
   - DOMAIN-SUFFIX,store.bblcdn.com,香港节点
   - DOMAIN-SUFFIX,iyf.tv,香港节点
 
-  # Cursor / AI（Loyalsoldier 未单独拆出，按日志补强）
-  - DOMAIN-SUFFIX,cursor.sh,AI
-  - DOMAIN-SUFFIX,cursor.com,AI
-  - DOMAIN-SUFFIX,cursorapi.com,AI
-  - DOMAIN-SUFFIX,cursorvm.com,AI
-  - DOMAIN-SUFFIX,openai.com,AI
-  - DOMAIN-SUFFIX,chatgpt.com,AI
-  - DOMAIN-SUFFIX,anthropic.com,AI
-  - DOMAIN-SUFFIX,claude.ai,AI
-
-  # 国外媒体（从通用 proxy 中提前分流）
-  - DOMAIN-SUFFIX,youtube.com,国外媒体
-  - DOMAIN-SUFFIX,googlevideo.com,国外媒体
-  - DOMAIN-SUFFIX,ytimg.com,国外媒体
-  - DOMAIN-SUFFIX,ggpht.com,国外媒体
-  - DOMAIN-SUFFIX,netflix.com,国外媒体
-  - DOMAIN-SUFFIX,nflxvideo.net,国外媒体
-  - DOMAIN-SUFFIX,spotify.com,国外媒体
-  - DOMAIN-SUFFIX,disneyplus.com,国外媒体
-
-  # 微软服务（可选手动/直连）
-  - DOMAIN-SUFFIX,microsoft.com,微软服务
-  - DOMAIN-SUFFIX,microsoftonline.com,微软服务
-  - DOMAIN-SUFFIX,msn.com,微软服务
-  - DOMAIN-SUFFIX,live.com,微软服务
-  - DOMAIN-SUFFIX,office.com,微软服务
-  - DOMAIN-SUFFIX,office.net,微软服务
-  - DOMAIN-SUFFIX,windows.com,微软服务
-  - DOMAIN-SUFFIX,windowsupdate.com,微软服务
-  - DOMAIN-SUFFIX,xbox.com,微软服务
-  - DOMAIN-SUFFIX,xboxlive.com,微软服务
-
-  # Loyalsoldier（白名单模式）
+  # Loyalsoldier 白名单模式（官方推荐顺序）
   - RULE-SET,applications,DIRECT
   - RULE-SET,private,DIRECT
   - RULE-SET,reject,REJECT
@@ -177,25 +145,6 @@ proxy-groups:
     proxies:
       - 香港节点
       - 美国节点
-  - name: 微软服务
-    type: select
-    proxies:
-      - DIRECT
-      - 香港节点
-      - 美国节点
-      - 手动选择
-  - name: AI
-    type: select
-    proxies:
-      - 美国节点
-      - 香港节点
-      - DIRECT
-  - name: 国外媒体
-    type: select
-    proxies:
-      - 香港节点
-      - 美国节点
-      - DIRECT
   - name: 漏网之鱼
     type: select
     proxies:
