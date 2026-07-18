@@ -118,6 +118,10 @@ rules:
   - DOMAIN-SUFFIX,lichidental.com,DIRECT
   - DOMAIN-SUFFIX,yutoons.com,DIRECT
   - DOMAIN-SUFFIX,mmm920.com,DIRECT
+  # 自建服务器 IP（端口无关，按 IP 匹配）
+  - IP-CIDR,38.55.195.82/32,DIRECT,no-resolve
+  - IP-CIDR,38.55.96.234/32,DIRECT,no-resolve
+  - IP-CIDR,198.46.175.234/32,DIRECT,no-resolve
 
   # 自定义代理
   - DOMAIN-SUFFIX,store.bblcdn.com,香港节点
