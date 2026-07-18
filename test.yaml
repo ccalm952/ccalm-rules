@@ -21,7 +21,7 @@ dns:
     - https://doh.pub/dns-query
     - https://dns.alidns.com/dns-query
 
-# Loyalsoldier clash-rules（黑名单模式：未命中则直连）
+# Loyalsoldier clash-rules（白名单模式：未命中则代理）
 # 参考：https://github.com/Loyalsoldier/clash-rules
 
 rule-providers:
@@ -81,20 +81,6 @@ rule-providers:
     behavior: domain
     url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/direct.txt"
     path: ./ruleset/loyalsoldier/direct.yaml
-    interval: 86400
-
-  gfw:
-    type: http
-    behavior: domain
-    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/gfw.txt"
-    path: ./ruleset/loyalsoldier/gfw.yaml
-    interval: 86400
-
-  tld-not-cn:
-    type: http
-    behavior: domain
-    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/tld-not-cn.txt"
-    path: ./ruleset/loyalsoldier/tld-not-cn.yaml
     interval: 86400
 
   telegramcidr:
@@ -169,15 +155,13 @@ rules:
   - DOMAIN-SUFFIX,xbox.com,微软服务
   - DOMAIN-SUFFIX,xboxlive.com,微软服务
 
-  # Loyalsoldier（黑名单模式）
+  # Loyalsoldier（白名单模式）
   - RULE-SET,applications,DIRECT
   - RULE-SET,private,DIRECT
   - RULE-SET,reject,REJECT
   - RULE-SET,icloud,DIRECT
   - RULE-SET,apple,DIRECT
-  - RULE-SET,google,DIRECT
-  - RULE-SET,tld-not-cn,手动选择
-  - RULE-SET,gfw,手动选择
+  - RULE-SET,google,手动选择
   - RULE-SET,proxy,手动选择
   - RULE-SET,direct,DIRECT
   - RULE-SET,lancidr,DIRECT,no-resolve
@@ -215,9 +199,9 @@ proxy-groups:
   - name: 漏网之鱼
     type: select
     proxies:
-      - DIRECT
       - 香港节点
       - 美国节点
+      - DIRECT
   - name: 香港节点
     type: url-test
     include-all-proxies: true
