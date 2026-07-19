@@ -23,10 +23,9 @@ dns:
 
 # Loyalsoldier clash-rules
 # 参考：https://github.com/Loyalsoldier/clash-rules
-# rule-providers / rules 顺序按官方 README 白名单模式
 
 rule-providers:
-  # fake-ip 过滤（非 Loyalsoldier，供 dns.fake-ip-filter 使用）
+  # fake-ip 过滤
   fakeip-filter:
     type: http
     behavior: domain
@@ -141,7 +140,7 @@ rules:
   - DOMAIN-SUFFIX,store.bblcdn.com,香港节点
   - DOMAIN-SUFFIX,iyf.tv,香港节点
 
-  # Loyalsoldier 白名单模式（官方顺序；PROXY → 手动选择，MATCH → 漏网之鱼）
+  # Loyalsoldier 白名单模式
   - RULE-SET,applications,DIRECT
   - DOMAIN,clash.razord.top,DIRECT
   - DOMAIN,yacd.haishan.me,DIRECT
