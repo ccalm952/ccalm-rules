@@ -25,7 +25,7 @@ dns:
 # 参考：https://github.com/ACL4SSR/ACL4SSR/blob/master/Clash/config/ACL4SSR_Online_Full.ini
 
 rule-providers:
-  # fake-ip 过滤（ShellCrash 维护，每日 interval 自动更新）
+  # fake-ip 过滤
   fakeip-filter:
     type: http
     behavior: domain
@@ -107,12 +107,16 @@ rule-providers:
     interval: 86400
 
 rules:
-  # 自定义（由 rules-web/ 管理页维护）
+  # 自定义
   # 自定义直连
   - DOMAIN-SUFFIX,ccalm.xyz,DIRECT
   - DOMAIN-SUFFIX,lichidental.com,DIRECT
   - DOMAIN-SUFFIX,yutoons.com,DIRECT
   - DOMAIN-SUFFIX,mmm920.com,DIRECT
+  # 自建服务器 IP
+  - IP-CIDR,38.55.195.82/32,DIRECT,no-resolve
+  - IP-CIDR,38.55.96.234/32,DIRECT,no-resolve
+  - IP-CIDR,198.46.175.234/32,DIRECT,no-resolve
 
   # 自定义代理
   - DOMAIN-SUFFIX,store.bblcdn.com,香港节点
@@ -135,16 +139,12 @@ proxy-groups:
     type: select
     proxies:
       - 香港节点
-      - 台湾节点
-      - 日本节点
       - 美国节点
   - name: 微软服务
     type: select
     proxies:
       - DIRECT
       - 香港节点
-      - 台湾节点
-      - 日本节点
       - 美国节点
       - 手动选择
   - name: AI
@@ -152,15 +152,11 @@ proxy-groups:
     proxies:
       - 美国节点
       - 香港节点
-      - 台湾节点
-      - 日本节点
       - DIRECT
   - name: 国外媒体
     type: select
     proxies:
       - 香港节点
-      - 台湾节点
-      - 日本节点
       - 美国节点
       - DIRECT
   - name: 漏网之鱼
@@ -168,27 +164,11 @@ proxy-groups:
     proxies:
       - DIRECT
       - 香港节点
-      - 台湾节点
-      - 日本节点
       - 美国节点
   - name: 香港节点
     type: url-test
     include-all-proxies: true
     filter: '香港'
-    url: https://cp.cloudflare.com/generate_204
-    interval: 300
-    tolerance: 50
-  - name: 台湾节点
-    type: url-test
-    include-all-proxies: true
-    filter: '台湾'
-    url: https://cp.cloudflare.com/generate_204
-    interval: 300
-    tolerance: 50
-  - name: 日本节点
-    type: url-test
-    include-all-proxies: true
-    filter: '日本'
     url: https://cp.cloudflare.com/generate_204
     interval: 300
     tolerance: 50
