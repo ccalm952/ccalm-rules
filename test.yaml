@@ -172,14 +172,14 @@ proxy-groups:
       - DIRECT
   - name: 香港节点
     type: url-test
-    include-all-proxies: true
+    include-all: true
     filter: '香港'
     url: https://cp.cloudflare.com/generate_204
     interval: 300
     tolerance: 50
   - name: 美国节点
     type: url-test
-    include-all-proxies: true
+    include-all: true
     filter: '美国'
     url: https://cp.cloudflare.com/generate_204
     interval: 300
