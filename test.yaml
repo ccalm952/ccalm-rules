@@ -4,6 +4,7 @@ profile:
   store-fake-ip: true    # 保留 fake-IP 映射
 
 mode: rule
+tcp-concurrent: true
 
 dns:
   enable: true
@@ -20,11 +21,11 @@ dns:
     - https://doh.pub/dns-query
     - https://dns.alidns.com/dns-query
 
-# Loyalsoldier clash-rules（白名单模式：未命中则代理）
+# Loyalsoldier clash-rules
 # 参考：https://github.com/Loyalsoldier/clash-rules
 
 rule-providers:
-  # fake-ip 过滤（ShellCrash 维护）
+  # fake-ip 过滤
   fakeip-filter:
     type: http
     behavior: domain
@@ -111,13 +112,13 @@ rule-providers:
     interval: 86400
 
 rules:
-  # 自定义（由 rules-web/ 管理页维护）
+  # 自定义
   # 自定义直连
   - DOMAIN-SUFFIX,ccalm.xyz,DIRECT
   - DOMAIN-SUFFIX,lichidental.com,DIRECT
   - DOMAIN-SUFFIX,yutoons.com,DIRECT
   - DOMAIN-SUFFIX,mmm920.com,DIRECT
-  # 自建服务器 IP（端口无关，按 IP 匹配）
+  # 自建服务器 IP
   - IP-CIDR,38.55.195.82/32,DIRECT,no-resolve
   - IP-CIDR,38.55.96.234/32,DIRECT,no-resolve
   - IP-CIDR,198.46.175.234/32,DIRECT,no-resolve
@@ -126,7 +127,7 @@ rules:
   - DOMAIN-SUFFIX,store.bblcdn.com,香港节点
   - DOMAIN-SUFFIX,iyf.tv,香港节点
 
-  # Loyalsoldier 白名单模式（官方推荐顺序）
+  # Loyalsoldier 白名单模式
   - RULE-SET,applications,DIRECT
   - RULE-SET,private,DIRECT
   - RULE-SET,reject,REJECT
