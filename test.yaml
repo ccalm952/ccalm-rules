@@ -139,6 +139,7 @@ rules:
   - RULE-SET,lancidr,DIRECT,no-resolve
   - RULE-SET,cncidr,DIRECT,no-resolve
   - RULE-SET,telegramcidr,手动选择,no-resolve
+  - GEOIP,LAN,DIRECT,no-resolve
   - GEOIP,CN,DIRECT,no-resolve
   - MATCH,漏网之鱼
 
