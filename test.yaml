@@ -4,7 +4,6 @@ profile:
   store-fake-ip: true    # 保留 fake-IP 映射
 
 mode: rule
-tcp-concurrent: true
 
 dns:
   enable: true
