@@ -104,12 +104,6 @@ rule-providers:
     path: ./ruleset/loyalsoldier/lancidr.yaml
     interval: 86400
 
-  applications:
-    type: http
-    behavior: classical
-    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/applications.txt"
-    path: ./ruleset/loyalsoldier/applications.yaml
-    interval: 86400
 
 rules:
   # 自定义
@@ -128,7 +122,6 @@ rules:
   - DOMAIN-SUFFIX,iyf.tv,香港节点
 
   # Loyalsoldier 白名单模式
-  - RULE-SET,applications,DIRECT
   - RULE-SET,private,DIRECT
   - RULE-SET,reject,REJECT
   - RULE-SET,icloud,DIRECT
