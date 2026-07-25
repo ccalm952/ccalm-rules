@@ -6,6 +6,15 @@ profile:
 mode: rule
 tcp-concurrent: true
 
+# Loyalsoldier geo 库
+# 参考：https://github.com/Loyalsoldier/v2ray-rules-dat
+geox-url:
+  geoip: "https://cdn.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/geoip.dat"
+  geosite: "https://cdn.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/geosite.dat"
+  mmdb: "https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/Country.mmdb"
+geo-auto-update: true
+geo-update-interval: 24
+
 dns:
   enable: true
   ipv6: false
