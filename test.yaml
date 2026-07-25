@@ -73,18 +73,45 @@ rules:
   - DOMAIN-SUFFIX,iyf.tv,香港节点
 
   # Loyalsoldier 白名单模式 + geosite 补充
+  # 下列 GEOSITE/GEOIP 均来自上方 geox-url 的 geosite.dat / geoip.dat
+  # private
+  # https://github.com/v2fly/domain-list-community/blob/master/data/private
   - GEOSITE,private,DIRECT
+  # category-ads-all
+  # https://github.com/v2fly/domain-list-community/blob/master/data/category-ads-all
   - GEOSITE,category-ads-all,REJECT
+  # steam@cn
+  # https://github.com/v2fly/domain-list-community/blob/master/data/steam
   - GEOSITE,steam@cn,DIRECT
+  # icloud
+  # https://github.com/v2fly/domain-list-community/blob/master/data/icloud
   - GEOSITE,icloud,DIRECT
+  # apple-cn
+  # https://cdn.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/apple-cn.txt
   - GEOSITE,apple-cn,DIRECT
+  # google-cn
+  # https://cdn.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/google-cn.txt
   - GEOSITE,google-cn,DIRECT
+  # category-ai-!cn
+  # https://github.com/v2fly/domain-list-community/blob/master/data/category-ai-!cn
   - GEOSITE,category-ai-!cn,AI
+  # microsoft
+  # https://github.com/v2fly/domain-list-community/blob/master/data/microsoft
   - GEOSITE,microsoft,微软服务
+  # proxy
+  # https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/proxy.txt
   - RULE-SET,proxy,手动选择
+  # direct
+  # https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/direct.txt
   - RULE-SET,direct,DIRECT
+  # telegram
+  # https://cdn.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/geoip.dat
   - GEOIP,telegram,手动选择,no-resolve
+  # LAN
+  # 内核内置局域网/保留地址
   - GEOIP,LAN,DIRECT,no-resolve
+  # CN
+  # https://cdn.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/geoip.dat
   - GEOIP,CN,DIRECT,no-resolve
   - MATCH,漏网之鱼
 
