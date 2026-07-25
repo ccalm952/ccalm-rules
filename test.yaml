@@ -140,14 +140,17 @@ rules:
   - DOMAIN-SUFFIX,store.bblcdn.com,香港节点
   - DOMAIN-SUFFIX,iyf.tv,香港节点
 
-  # Loyalsoldier 白名单模式
+  # Loyalsoldier 白名单模式 + geosite 补充
   - RULE-SET,applications,DIRECT
   - DOMAIN,clash.razord.top,DIRECT
   - DOMAIN,yacd.haishan.me,DIRECT
   - RULE-SET,private,DIRECT
   - RULE-SET,reject,REJECT
+  - GEOSITE,steam@cn,DIRECT
   - RULE-SET,icloud,DIRECT
   - RULE-SET,apple,DIRECT
+  - GEOSITE,category-ai-!cn,AI
+  - GEOSITE,microsoft,微软服务
   - RULE-SET,google,手动选择
   - RULE-SET,proxy,手动选择
   - RULE-SET,direct,DIRECT
@@ -164,6 +167,19 @@ proxy-groups:
     proxies:
       - 香港节点
       - 美国节点
+  - name: 微软服务
+    type: select
+    proxies:
+      - DIRECT
+      - 香港节点
+      - 美国节点
+      - 手动选择
+  - name: AI
+    type: select
+    proxies:
+      - 美国节点
+      - 香港节点
+      - DIRECT
   - name: 漏网之鱼
     type: select
     proxies:
