@@ -30,9 +30,6 @@ dns:
     - https://doh.pub/dns-query
     - https://dns.alidns.com/dns-query
 
-# Loyalsoldier clash-rules
-# 参考：https://github.com/Loyalsoldier/clash-rules
-
 rule-providers:
   # fake-ip 过滤
   fakeip-filter:
@@ -41,20 +38,6 @@ rule-providers:
     format: text
     url: "https://raw.githubusercontent.com/juewuy/ShellCrash/dev/public/fake_ip_filter.list"
     path: ./ruleset/fakeip-filter.list
-    interval: 86400
-
-  proxy:
-    type: http
-    behavior: domain
-    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/proxy.txt"
-    path: ./ruleset/loyalsoldier/proxy.yaml
-    interval: 86400
-
-  direct:
-    type: http
-    behavior: domain
-    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/direct.txt"
-    path: ./ruleset/loyalsoldier/direct.yaml
     interval: 86400
 
 rules:
@@ -72,25 +55,17 @@ rules:
   - DOMAIN-SUFFIX,store.bblcdn.com,香港节点
   - DOMAIN-SUFFIX,iyf.tv,香港节点
 
-  # Loyalsoldier 白名单模式 + geosite 补充
+  # Loyalsoldier 白名单模式
   # GEOSITE → geox-url.geosite
   # https://cdn.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/geosite.dat
   - GEOSITE,private,DIRECT
   - GEOSITE,category-ads-all,REJECT
   - GEOSITE,steam@cn,DIRECT
-  - GEOSITE,icloud,DIRECT
-  - GEOSITE,apple-cn,DIRECT
-  - GEOSITE,google-cn,DIRECT
   - GEOSITE,category-ai-!cn,AI
-  - GEOSITE,microsoft,微软服务
-  # RULE-SET → clash-rules
-  # https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/proxy.txt
-  - RULE-SET,proxy,手动选择
-  # https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/direct.txt
-  - RULE-SET,direct,DIRECT
+  - GEOSITE,geolocation-!cn,手动选择
+  - GEOSITE,cn,DIRECT
   # GEOIP → geox-url.geoip
   # https://cdn.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/geoip.dat
-  - GEOIP,telegram,手动选择,no-resolve
   - GEOIP,private,DIRECT,no-resolve
   - GEOIP,CN,DIRECT,no-resolve
   - MATCH,漏网之鱼
@@ -101,13 +76,6 @@ proxy-groups:
     proxies:
       - 香港节点
       - 美国节点
-  - name: 微软服务
-    type: select
-    proxies:
-      - DIRECT
-      - 香港节点
-      - 美国节点
-      - 手动选择
   - name: AI
     type: select
     proxies:
