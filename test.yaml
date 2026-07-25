@@ -8,6 +8,7 @@ tcp-concurrent: true
 
 # Loyalsoldier geo 库
 # 参考：https://github.com/Loyalsoldier/v2ray-rules-dat
+geodata-mode: true
 geox-url:
   geoip: "https://cdn.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/geoip.dat"
   geosite: "https://cdn.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/geosite.dat"
