@@ -1,7 +1,7 @@
 # 状态持久化 → cache.db
 profile:
-  store-selected: true   # 保留策略组选中节点
-  store-fake-ip: true    # 保留 fake-IP 映射
+  store-selected: true # 保留策略组选中节点
+  store-fake-ip: true # 保留 fake-IP 映射
 
 mode: rule
 tcp-concurrent: true
@@ -23,7 +23,7 @@ dns:
   fake-ip-filter-mode: blacklist
   fake-ip-filter:
     - rule-set:fakeip-filter
-  default-nameserver:   # 纯 IP，引导解析 DoH 域名
+  default-nameserver: # 纯 IP，引导解析 DoH 域名
     - 119.29.29.29
     - 223.5.5.5
   nameserver:
@@ -46,6 +46,7 @@ rules:
   - DOMAIN-SUFFIX,lichidental.com,DIRECT
   - DOMAIN-SUFFIX,yutoons.com,DIRECT
   - DOMAIN-SUFFIX,mmm920.com,DIRECT
+
   # 自建服务器 IP
   - IP-CIDR,38.55.195.82/32,DIRECT,no-resolve
   - IP-CIDR,38.55.96.234/32,DIRECT,no-resolve
@@ -64,6 +65,7 @@ rules:
   - GEOSITE,category-ai-!cn,AI
   - GEOSITE,geolocation-!cn,手动选择
   - GEOSITE,cn,DIRECT
+
   # GEOIP → geox-url.geoip
   # https://cdn.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/geoip.dat
   - GEOIP,private,DIRECT,no-resolve
@@ -76,29 +78,33 @@ proxy-groups:
     proxies:
       - 香港节点
       - 美国节点
+
   - name: AI
     type: select
     proxies:
       - 美国节点
       - 香港节点
       - DIRECT
+
   - name: 漏网之鱼
     type: select
     proxies:
       - 香港节点
       - 美国节点
       - DIRECT
+
   - name: 香港节点
     type: url-test
     include-all: true
-    filter: '香港'
+    filter: "香港"
     url: https://cp.cloudflare.com/generate_204
     interval: 300
     tolerance: 50
+
   - name: 美国节点
     type: url-test
     include-all: true
-    filter: '美国'
+    filter: "美国"
     url: https://cp.cloudflare.com/generate_204
     interval: 300
     tolerance: 50
