@@ -37,6 +37,9 @@ sniffer:
   override-destination: true
   parse-pure-ip: true
   sniff:
+    QUIC:
+      ports:
+        - 443
     TLS:
       ports:
         - 443
