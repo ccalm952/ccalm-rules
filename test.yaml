@@ -31,6 +31,22 @@ dns:
     - https://doh.pub/dns-query
     - https://dns.alidns.com/dns-query
 
+# 域名嗅探
+sniffer:
+  enable: true
+  override-destination: true
+  parse-pure-ip: true
+  sniff:
+    # 未写 ports 时 TLS 默认 443，HTTP 默认 80
+    TLS: {}
+    HTTP: {}
+  skip-domain:
+    # Mijia Cloud 是特殊 SNI，不能用 +.mi.com 替代
+    - Mijia Cloud
+    - "+.push.apple.com"
+    - "+.mi.com"
+    - "+.oray.com"
+
 rule-providers:
   # fake-ip 过滤
   fakeip-filter:
