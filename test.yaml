@@ -85,7 +85,6 @@ rules:
   # GEOSITE → geox-url.geosite
   # https://cdn.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/geosite.dat
   - GEOSITE,private,DIRECT
-  - GEOSITE,category-ads-all,REJECT
   - GEOSITE,steam@cn,DIRECT
   - GEOSITE,category-ai-!cn,AI
   - GEOSITE,geolocation-!cn,手动选择
