@@ -5,6 +5,7 @@ profile:
 
 mode: rule
 tcp-concurrent: true
+unified-delay: true
 
 # Loyalsoldier geo 库
 # 参考：https://github.com/Loyalsoldier/v2ray-rules-dat
@@ -121,7 +122,7 @@ proxy-groups:
     type: url-test
     include-all: true
     filter: "香港"
-    url: https://cp.cloudflare.com/generate_204
+    url: https://www.gstatic.com/generate_204
     interval: 300
     tolerance: 50
 
@@ -129,6 +130,6 @@ proxy-groups:
     type: url-test
     include-all: true
     filter: "美国"
-    url: https://cp.cloudflare.com/generate_204
+    url: https://www.gstatic.com/generate_204
     interval: 300
     tolerance: 50
