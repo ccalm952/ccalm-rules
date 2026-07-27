@@ -81,7 +81,7 @@ rules:
   - DOMAIN-SUFFIX,store.bblcdn.com,香港节点
   - DOMAIN-SUFFIX,iyf.tv,香港节点
 
-  # Loyalsoldier 白名单模式
+  # Loyalsoldier 黑名单模式（默认直连，命中国外再代理）
   # GEOSITE → geox-url.geosite
   # https://cdn.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/geosite.dat
   - GEOSITE,private,DIRECT
@@ -94,7 +94,7 @@ rules:
   # https://cdn.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/geoip.dat
   - GEOIP,private,DIRECT,no-resolve
   - GEOIP,CN,DIRECT,no-resolve
-  - MATCH,漏网之鱼
+  - MATCH,DIRECT
 
 proxy-groups:
   - name: 手动选择
@@ -108,13 +108,6 @@ proxy-groups:
     proxies:
       - 美国节点
       - 香港节点
-      - DIRECT
-
-  - name: 漏网之鱼
-    type: select
-    proxies:
-      - 香港节点
-      - 美国节点
       - DIRECT
 
   - name: 香港节点
