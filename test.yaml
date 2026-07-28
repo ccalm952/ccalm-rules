@@ -25,8 +25,6 @@ dns:
   fake-ip-filter-mode: blacklist
   fake-ip-filter:
     - rule-set:fakeip-filter
-    # 微信本机回环；ShellCrash 列表仅有 localhost.*.weixin.qq.com，盖不住本域名
-    - localhost.weixin.qq.com
   default-nameserver: # 纯 IP，引导解析 DoH 域名
     - 119.29.29.29
     - 223.5.5.5
@@ -58,12 +56,12 @@ sniffer:
     - "+.oray.com"
 
 rule-providers:
-  # fake-ip 过滤
+  # fake-ip 过滤（自维护）
   fakeip-filter:
     type: http
     behavior: domain
     format: text
-    url: "https://raw.githubusercontent.com/juewuy/ShellCrash/dev/public/fake_ip_filter.list"
+    url: "https://raw.githubusercontent.com/ccalm952/ccalm-rules/main/fake_ip_filter.list"
     path: ./ruleset/fakeip-filter.list
     interval: 86400
 

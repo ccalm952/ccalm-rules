@@ -1,0 +1,81 @@
+# ccalm fake-ip 过滤（名单内用真实 DNS，不走 fake-ip）
+# 按实际在用服务精简；路由器品牌域名已去掉
+
+# LAN / 本机短域名
+*
+*.lan
+*.local
+*.localdomain
+*.home.arpa
+*.localhost
+*.test
+*.invalid
+*.example
+*.direct
+
+# NTP
++.pool.ntp.org
+*.ntp.org.cn
+*.time.edu.cn
+time.*.com
+time.*.gov
+time.*.edu.cn
+time.*.apple.com
+time-ios.apple.com
+ntp.*.com
+time1.cloud.tencent.com
+
+# QQ / 微信本机回环
+localhost.ptlogin2.qq.com
+localhost.sec.qq.com
+localhost.weixin.qq.com
+localhost.*.weixin.qq.com
+
+# QQ 音乐
+y.qq.com
++.y.qq.com
++.qqmusic.qq.com
++.music.tc.qq.com
+
+# 网易云
+music.163.com
++.music.163.com
++.126.net
+
+# Steam
++.steamcontent.com
++.steamstatic.com
+
+# 向日葵
++.oray.com
++.orayimg.com
+
+# LOL 语音
++.gcloudcs.com
++.gcloudsdk.com
+
+# STUN / Windows 连通性检测
++.stun.*.*
++.stun.*.*.*
++.stun.*.*.*.*
++.stun.*.*.*.*.*
++.msftconnecttest.com
++.msftncsi.com
+
+# Bilibili
+*.mcdn.bilivideo.cn
+
+# 招商银行
++.cmbchina.com
++.cmbimg.com
+
+# 小米 / 米家
+Mijia Cloud
++.market.xiaomi.com
+
+# AdGuard
+adguardteam.github.io
+adrules.top
+anti-ad.net
+local.adguard.org
+static.adtidy.org
