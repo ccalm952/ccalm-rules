@@ -1,5 +1,4 @@
 # ccalm fake-ip 过滤（名单内用真实 DNS，不走 fake-ip）
-# 按实际在用服务精简；路由器品牌域名已去掉
 
 # LAN / 本机短域名
 *
@@ -18,10 +17,7 @@
 *.ntp.org.cn
 *.time.edu.cn
 time.*.com
-time.*.gov
-time.*.edu.cn
 time.*.apple.com
-time-ios.apple.com
 ntp.*.com
 time1.cloud.tencent.com
 
@@ -42,9 +38,8 @@ music.163.com
 +.music.163.com
 +.126.net
 
-# Steam
+# Steam（下载 CDN；分流已有 GEOSITE,steam）
 +.steamcontent.com
-+.steamstatic.com
 
 # 向日葵
 +.oray.com
@@ -57,25 +52,14 @@ music.163.com
 # STUN / Windows 连通性检测
 +.stun.*.*
 +.stun.*.*.*
-+.stun.*.*.*.*
-+.stun.*.*.*.*.*
 +.msftconnecttest.com
 +.msftncsi.com
 
 # Bilibili
 *.mcdn.bilivideo.cn
 
-# 招商银行
-+.cmbchina.com
-+.cmbimg.com
-
-# 小米 / 米家
+# 米家
 Mijia Cloud
-+.market.xiaomi.com
 
-# AdGuard
-adguardteam.github.io
-adrules.top
-anti-ad.net
-local.adguard.org
+# AdGuard（官方静态资源；其它规则源域名按需再加）
 static.adtidy.org
