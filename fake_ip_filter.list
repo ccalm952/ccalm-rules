@@ -38,28 +38,8 @@ music.163.com
 +.music.163.com
 +.126.net
 
-# Steam（下载 CDN；分流已有 GEOSITE,steam）
-+.steamcontent.com
-
-# 向日葵
-+.oray.com
-+.orayimg.com
-
-# LOL 语音
-+.gcloudcs.com
-+.gcloudsdk.com
-
 # STUN / Windows 连通性检测
 +.stun.*.*
 +.stun.*.*.*
 +.msftconnecttest.com
 +.msftncsi.com
-
-# Bilibili
-*.mcdn.bilivideo.cn
-
-# 米家
-Mijia Cloud
-
-# AdGuard（官方静态资源；其它规则源域名按需再加）
-static.adtidy.org
