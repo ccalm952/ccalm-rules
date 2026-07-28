@@ -56,8 +56,6 @@ sniffer:
     - Mijia Cloud
     - "+.push.apple.com"
     - "+.oray.com"
-    - localhost.weixin.qq.com
-    - "+.localhost.weixin.qq.com"
 
 rule-providers:
   # fake-ip 过滤
