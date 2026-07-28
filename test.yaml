@@ -87,10 +87,7 @@ rules:
   # GEOSITE → geox-url.geosite
   # https://cdn.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/geosite.dat
   - GEOSITE,private,DIRECT
-  - GEOSITE,steam@cn,DIRECT
-  # Steam 游戏下载 CDN（国际节点无 @cn，易命中 geolocation-!cn）
-  - DOMAIN-SUFFIX,steamcontent.com,DIRECT
-  - DOMAIN-SUFFIX,steamstatic.com,DIRECT
+  - GEOSITE,steam,DIRECT
   - GEOSITE,category-ai-!cn,AI
   - GEOSITE,geolocation-!cn,手动选择
   - GEOSITE,cn,DIRECT
