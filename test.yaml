@@ -84,20 +84,19 @@ rules:
   - DOMAIN-SUFFIX,xifanacg.com,香港节点
   - DOMAIN-SUFFIX,sidestore.io,手动选择
 
-  # Loyalsoldier 白名单模式（默认代理，命中国内再直连）
+  # Loyalsoldier 白名单（官方顺序，不含 icloud）
+  # https://github.com/Loyalsoldier/v2ray-rules-dat
   # GEOSITE → geox-url.geosite
-  # https://cdn.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/geosite.dat
-  - GEOSITE,private,DIRECT
   - GEOSITE,tld-cn,DIRECT
-  - GEOSITE,steam,DIRECT
+  - GEOSITE,category-games@cn,DIRECT
   - GEOSITE,category-ai-!cn,AI
   - GEOSITE,geolocation-!cn,手动选择
   - GEOSITE,cn,DIRECT
+  - GEOSITE,private,DIRECT
 
   # GEOIP → geox-url.geoip
-  # https://cdn.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/geoip.dat
-  - GEOIP,PRIVATE,DIRECT,no-resolve
   - GEOIP,CN,DIRECT,no-resolve
+  - GEOIP,PRIVATE,DIRECT,no-resolve
   - MATCH,手动选择
 
 proxy-groups:
