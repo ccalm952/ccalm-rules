@@ -82,6 +82,7 @@ rules:
   - DOMAIN-SUFFIX,iyf.tv,香港节点
   - DOMAIN-SUFFIX,agedm.vip,香港节点
   - DOMAIN-SUFFIX,xifanacg.com,香港节点
+  - DOMAIN-SUFFIX,abdownloadmanager.com,香港节点
   - DOMAIN-SUFFIX,sidestore.io,手动选择
 
   # Loyalsoldier 黑名单模式（默认直连，命中国外再代理）
