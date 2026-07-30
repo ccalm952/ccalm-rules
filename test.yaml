@@ -1,21 +1,24 @@
-# 状态持久化 → cache.db
-profile:
-  store-selected: true # 保留策略组选中节点
-  store-fake-ip: true # 保留 fake-IP 映射
-
+# 运行模式
 mode: rule
-tcp-concurrent: true
+keep-alive-interval: 15
+keep-alive-idle: 15
+# 缓存
+profile:
+  store-selected: true
+  store-fake-ip: true
+# 统一延迟
 unified-delay: true
-
-# Loyalsoldier geo 库
-# 参考：https://github.com/Loyalsoldier/v2ray-rules-dat
+# TCP 并发
+tcp-concurrent: true
+# GEOIP 数据模式
 geodata-mode: true
+# 自动更新 GEO
+geo-auto-update: true
+geo-update-interval: 24
+# 自定义 GEO 下载地址（geodata-mode 用 dat，不用 mmdb）
 geox-url:
   geoip: "https://cdn.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/geoip.dat"
   geosite: "https://cdn.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/geosite.dat"
-  mmdb: "https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/Country.mmdb"
-geo-auto-update: true
-geo-update-interval: 24
 
 dns:
   enable: true
