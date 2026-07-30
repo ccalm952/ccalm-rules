@@ -95,7 +95,7 @@ rules:
 
   # GEOIP → geox-url.geoip
   # https://cdn.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/geoip.dat
-  - GEOIP,private,DIRECT,no-resolve
+  - GEOIP,PRIVATE,DIRECT,no-resolve
   - GEOIP,CN,DIRECT,no-resolve
   - MATCH,手动选择
 
