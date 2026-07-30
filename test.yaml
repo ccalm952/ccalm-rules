@@ -85,7 +85,8 @@ rules:
   - DOMAIN-SUFFIX,abdownloadmanager.com,香港节点
   - DOMAIN-SUFFIX,sidestore.io,手动选择
 
-  # Loyalsoldier 黑名单模式（默认直连，命中国外再代理）
+  # Loyalsoldier：国内名单直连；未匹配（含小站/Cloudflare 等）走代理
+  # 避免黑名单 MATCH 直连导致 ERR_CONNECTION_CLOSED，又不必每个站单独加规则
   # GEOSITE → geox-url.geosite
   # https://cdn.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/geosite.dat
   - GEOSITE,private,DIRECT
@@ -98,7 +99,7 @@ rules:
   # https://cdn.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/geoip.dat
   - GEOIP,private,DIRECT,no-resolve
   - GEOIP,CN,DIRECT,no-resolve
-  - MATCH,DIRECT
+  - MATCH,手动选择
 
 proxy-groups:
   - name: 手动选择
