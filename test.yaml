@@ -82,10 +82,9 @@ rules:
   - DOMAIN-SUFFIX,iyf.tv,香港节点
   - DOMAIN-SUFFIX,agedm.vip,香港节点
   - DOMAIN-SUFFIX,xifanacg.com,香港节点
-  - DOMAIN-SUFFIX,abdownloadmanager.com,香港节点
   - DOMAIN-SUFFIX,sidestore.io,手动选择
 
-  # Loyalsoldier 黑名单模式（默认直连，命中国外再代理）
+  # Loyalsoldier 白名单模式（默认代理，命中国内再直连）
   # GEOSITE → geox-url.geosite
   # https://cdn.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/geosite.dat
   - GEOSITE,private,DIRECT
@@ -98,7 +97,7 @@ rules:
   # https://cdn.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/geoip.dat
   - GEOIP,private,DIRECT,no-resolve
   - GEOIP,CN,DIRECT,no-resolve
-  - MATCH,DIRECT
+  - MATCH,手动选择
 
 proxy-groups:
   - name: 手动选择
