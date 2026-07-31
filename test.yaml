@@ -51,6 +51,9 @@ sniffer:
       ports: [443]
     QUIC:
       ports: [443]
+  force-domain:
+    - "+.netflix.com"
+    - "+.nflxvideo.net"
   skip-domain:
     - Mijia Cloud
 
