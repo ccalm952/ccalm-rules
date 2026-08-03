@@ -92,6 +92,7 @@ rules:
   - GEOSITE,tld-cn,DIRECT
   - GEOSITE,category-games@cn,DIRECT
   - GEOSITE,category-ai-!cn,AI
+  - GEOSITE,microsoft,微软服务
   - GEOSITE,geolocation-!cn,手动选择
   - GEOSITE,cn,DIRECT
   - GEOSITE,private,DIRECT
@@ -114,6 +115,13 @@ proxy-groups:
       - 美国节点
       - 香港节点
       - DIRECT
+
+  - name: 微软服务
+    type: select
+    proxies:
+      - DIRECT
+      - 香港节点
+      - 美国节点
 
   - name: 香港节点
     type: url-test
