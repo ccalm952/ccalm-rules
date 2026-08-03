@@ -15,6 +15,9 @@ const BookmarksEditor = lazy(() =>
 const MemosEditor = lazy(() =>
   import("@/components/MemosEditor").then((m) => ({ default: m.MemosEditor })),
 );
+const SpeedTestEditor = lazy(() =>
+  import("@/components/SpeedTestEditor").then((m) => ({ default: m.SpeedTestEditor })),
+);
 
 interface AdminShellProps {
   password: string;
@@ -46,6 +49,7 @@ export function AdminShell({ password, onLogout }: AdminShellProps) {
             <TabsTrigger value="rules">Clash 规则</TabsTrigger>
             <TabsTrigger value="bookmarks">常用网址</TabsTrigger>
             <TabsTrigger value="memos">备忘录</TabsTrigger>
+            <TabsTrigger value="speed">网页测速</TabsTrigger>
           </TabsList>
           <Button variant="outline" size="sm" onClick={handleLogout}>
             <LogOut />
@@ -73,6 +77,13 @@ export function AdminShell({ password, onLogout }: AdminShellProps) {
         {tab === "memos" ? (
           <Suspense fallback={<TabFallback />}>
             <MemosEditor password={password} />
+          </Suspense>
+        ) : null}
+      </TabsContent>
+      <TabsContent value="speed" className="mt-0 focus-visible:outline-none">
+        {tab === "speed" ? (
+          <Suspense fallback={<TabFallback />}>
+            <SpeedTestEditor password={password} />
           </Suspense>
         ) : null}
       </TabsContent>
