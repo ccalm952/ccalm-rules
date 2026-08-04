@@ -64,7 +64,21 @@ bridge 部署见官方示例，路径改为 `/ccalm`，`-p 127.0.0.1:3001:3001`�
 
 > **端口说明**：Sub-Store 占 `3001`；本机 `rules-api` 固定 `PORT=3002`，Nginx `/api` 反代到该端口。
 
-### 服务器更新
+### 自动部署
+
+与 [ccalm-system](https://github.com/ccalm952/ccalm-system) 同一台服务器；生产发布由 GitHub Actions 工作流 `Deploy` 负责（脚本在 `.github/scripts/`）。
+
+合并到 `main` 后会自动 SSH 部署；也可在 Actions 里手动 `workflow_dispatch`，并选择 `auto` / `web` / `api` / `all`。
+
+需在本仓库 Secrets 配置（可与 ccalm-system 使用同一把部署密钥）：
+
+- `DEPLOY_SSH_KEY`（必填）：部署用私钥
+- `DEPLOY_SSH_HOST`（可选，默认 `106.53.206.11`）
+- `DEPLOY_SSH_USER`（可选，默认 `root`）
+
+只改 `rules-web` 会部署前端；改 `rules-api` 会跑 `prisma migrate deploy`、构建并 `pm2 restart rules-api`；仅改 yaml / 文档则跳过构建（OpenClash 走 GitHub raw）。部署成功后站点根目录会写入 `deploy-version.json`；API 会请求 `http://127.0.0.1:3002/api/health`（期望 `401`/`200`）。
+
+### 服务器手动更新
 
 ```bash
 # 1. 拉代码
@@ -80,7 +94,7 @@ pm2 restart rules-api
 
 # 3. 更新前端并发布到 1Panel 站点目录
 cd /opt/ccalm-rules/rules-web
-# .env.production: VITE_API_BASE=https://rules.ccalm.xyz/api
+# .env.production 可选；默认 VITE_API_BASE=/api（同域反代）
 npm install
 npm run build
 rsync -a --delete dist/ /opt/1panel/www/sites/rules.ccalm.xyz/index/
