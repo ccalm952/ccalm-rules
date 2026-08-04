@@ -92,6 +92,7 @@ rules:
   - GEOSITE,tld-cn,DIRECT
   - GEOSITE,category-games@cn,DIRECT
   - GEOSITE,category-ai-!cn,AI
+  - GEOSITE,github,手动选择
   - GEOSITE,microsoft,微软服务
   - GEOSITE,geolocation-!cn,手动选择
   - GEOSITE,cn,DIRECT
