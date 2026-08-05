@@ -34,7 +34,7 @@ npm run dev            # 自动 migrate deploy + 启动，http://127.0.0.1:3001
 | 变量 | 说明 |
 |------|------|
 | `PORT` | 端口，默认 `3001` |
-| `ADMIN_PASSWORD` | 管理页登录密码 |
+| `ADMIN_PASSWORD` | 管理页 4 位数字密码（与前端 PIN 一致） |
 | `DATABASE_URL` | SQLite，如 `file:./dev.db` |
 | `GITHUB_TOKEN` | 有 repo 写权限的 PAT |
 | `GITHUB_OWNER` | 默认 `ccalm952` |

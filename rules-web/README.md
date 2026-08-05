@@ -16,7 +16,7 @@ ccalm-rules.yaml      →  自定义规则写在 rules: 段顶部（经 GitHub A
 # 终端 1：API
 cd rules-api
 npm install
-cp .env.example .env   # 填入 GITHUB_TOKEN、ADMIN_PASSWORD
+cp .env.example .env   # 填入 GITHUB_TOKEN、ADMIN_PASSWORD（4 位数字）
 npx prisma migrate dev
 npm run dev            # http://127.0.0.1:3001
 
