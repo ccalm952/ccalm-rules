@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Lock } from "lucide-react";
 import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
@@ -29,34 +28,32 @@ export function LoginCard({ onSuccess }: LoginCardProps) {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const unlockingRef = useRef(false);
 
   useEffect(() => {
     inputRef.current?.focus();
   }, []);
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    if (!/^\d{4}$/.test(password)) {
-      toast.error("请输入 4 位数字密码");
-      return;
-    }
+  async function tryUnlock(pin: string) {
+    if (unlockingRef.current || !/^\d{4}$/.test(pin)) return;
+    unlockingRef.current = true;
     setLoading(true);
     try {
-      const ok = await verifyPassword(password);
+      const ok = await verifyPassword(pin);
       if (!ok) {
-        toast.error("密码错误或 API 不可用");
+        toast.error("密码错误");
         setPassword("");
         inputRef.current?.focus();
         return;
       }
-      storePassword(password);
-      onSuccess(password);
-      toast.success("已登录");
+      storePassword(pin);
+      onSuccess(pin);
     } catch {
       toast.error("无法连接 API，请确认 rules-api 已启动");
       setPassword("");
       inputRef.current?.focus();
     } finally {
+      unlockingRef.current = false;
       setLoading(false);
     }
   }
@@ -72,7 +69,7 @@ export function LoginCard({ onSuccess }: LoginCardProps) {
           <CardDescription>输入 4 位管理密码</CardDescription>
         </CardHeader>
         <CardContent>
-          <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+          <div className="relative">
             <Input
               ref={inputRef}
               id="password"
@@ -85,20 +82,17 @@ export function LoginCard({ onSuccess }: LoginCardProps) {
               disabled={loading}
               className="text-center text-lg tracking-[0.4em]"
               onChange={(e) => {
-                setPassword(e.target.value.replace(/\D/g, "").slice(0, 4));
+                const next = e.target.value.replace(/\D/g, "").slice(0, 4);
+                setPassword(next);
+                if (next.length === 4) void tryUnlock(next);
               }}
             />
-            <Button type="submit" className="w-full" disabled={loading || password.length !== 4}>
-              {loading ? (
-                <>
-                  <Spinner />
-                  验证中…
-                </>
-              ) : (
-                "确认"
-              )}
-            </Button>
-          </form>
+            {loading ? (
+              <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+                <Spinner />
+              </div>
+            ) : null}
+          </div>
         </CardContent>
       </Card>
     </div>
