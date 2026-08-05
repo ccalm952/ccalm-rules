@@ -37,12 +37,13 @@ export function LoginCard({ onSuccess }: LoginCardProps) {
     if (unlockingRef.current || !/^\d{4}$/.test(pin)) return;
     unlockingRef.current = true;
     setLoading(true);
+    let failed = false;
     try {
       const ok = await verifyPassword(pin);
       if (!ok) {
         toast.error("密码错误");
         setPassword("");
-        inputRef.current?.focus();
+        failed = true;
         return;
       }
       storePassword(pin);
@@ -50,17 +51,21 @@ export function LoginCard({ onSuccess }: LoginCardProps) {
     } catch {
       toast.error("无法连接 API，请确认 rules-api 已启动");
       setPassword("");
-      inputRef.current?.focus();
+      failed = true;
     } finally {
       unlockingRef.current = false;
       setLoading(false);
+      if (failed) {
+        // disabled 解除后再聚焦，否则焦点会丢
+        requestAnimationFrame(() => inputRef.current?.focus());
+      }
     }
   }
 
   return (
     <div className="flex min-h-svh items-center justify-center p-4">
       <Card className="w-full max-w-sm">
-        <CardHeader className="pb-2">
+        <CardHeader className="pb-2 text-center">
           <CardTitle className="text-base font-medium">输入密码</CardTitle>
         </CardHeader>
         <CardContent>
@@ -74,9 +79,10 @@ export function LoginCard({ onSuccess }: LoginCardProps) {
               maxLength={4}
               placeholder="••••"
               value={password}
-              disabled={loading}
+              readOnly={loading}
               className="text-center text-lg tracking-[0.4em]"
               onChange={(e) => {
+                if (loading) return;
                 const next = e.target.value.replace(/\D/g, "").slice(0, 4);
                 setPassword(next);
                 if (next.length === 4) void tryUnlock(next);
