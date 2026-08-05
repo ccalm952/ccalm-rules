@@ -80,7 +80,7 @@ export function LoginCard({ onSuccess }: LoginCardProps) {
               placeholder="••••"
               value={password}
               readOnly={loading}
-              className="text-center text-lg tracking-[0.4em]"
+              className="text-lg tracking-[0.4em]"
               onChange={(e) => {
                 if (loading) return;
                 const next = e.target.value.replace(/\D/g, "").slice(0, 4);
