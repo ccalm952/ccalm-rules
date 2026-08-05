@@ -61,7 +61,7 @@ export function LoginCard({ onSuccess }: LoginCardProps) {
     <div className="flex min-h-svh items-center justify-center p-4">
       <Card className="w-full max-w-sm">
         <CardHeader className="pb-2">
-          <CardTitle className="text-base font-medium">输入 4 位管理密码</CardTitle>
+          <CardTitle className="text-base font-medium">输入密码</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="relative">
