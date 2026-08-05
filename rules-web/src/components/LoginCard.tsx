@@ -64,7 +64,7 @@ export function LoginCard({ onSuccess }: LoginCardProps) {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Lock className="h-5 w-5" />
-            952的网站
+            Ccalm
           </CardTitle>
           <CardDescription>输入 4 位管理密码</CardDescription>
         </CardHeader>
