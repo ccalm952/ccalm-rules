@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { Lock } from "lucide-react";
 import { toast } from "sonner";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
 import { verifyPassword } from "@/lib/api";
@@ -61,12 +60,8 @@ export function LoginCard({ onSuccess }: LoginCardProps) {
   return (
     <div className="flex min-h-svh items-center justify-center p-4">
       <Card className="w-full max-w-sm">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Lock className="h-5 w-5" />
-            Ccalm
-          </CardTitle>
-          <CardDescription>输入 4 位管理密码</CardDescription>
+        <CardHeader className="pb-2">
+          <CardTitle className="text-base font-medium">输入密码</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="relative">
