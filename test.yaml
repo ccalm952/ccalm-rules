@@ -58,7 +58,7 @@ sniffer:
     - Mijia Cloud
 
 rule-providers:
-  # fake-ip 过滤（自维护）
+  # fake-ip 过滤
   fakeip-filter:
     type: http
     behavior: domain
@@ -75,20 +75,20 @@ rules:
   - DOMAIN-SUFFIX,mmm920.com,DIRECT
   - DOMAIN-SUFFIX,zenlesszonezero.com,DIRECT
 
-  # 自建服务器 IP
-  - IP-CIDR,38.55.195.82/32,DIRECT,no-resolve
-  - IP-CIDR,38.55.96.234/32,DIRECT,no-resolve
-  - IP-CIDR,198.46.175.234/32,DIRECT,no-resolve
-
   # 自定义代理
   - DOMAIN-SUFFIX,store.bblcdn.com,香港节点
   - DOMAIN-SUFFIX,iyf.tv,香港节点
   - DOMAIN-SUFFIX,agedm.vip,香港节点
   - DOMAIN-SUFFIX,xifanacg.com,香港节点
-  - DOMAIN-SUFFIX,sidestore.io,手动选择
+  - DOMAIN-SUFFIX,sidestore.io,香港节点
 
-  # Loyalsoldier 白名单
-  # https://github.com/Loyalsoldier/v2ray-rules-dat
+  # 自定义 IP
+  - IP-CIDR,38.55.195.82/32,DIRECT,no-resolve
+  - IP-CIDR,38.55.96.234/32,DIRECT,no-resolve
+  - IP-CIDR,198.46.175.234/32,DIRECT,no-resolve
+
+  # 自定义结束
+
   # GEOSITE → geox-url.geosite
   - GEOSITE,tld-cn,DIRECT
   - GEOSITE,category-games@cn,DIRECT

@@ -19,7 +19,12 @@ const CONFIG_FILE = "ccalm-rules.yaml";
 const RULE_LINE = /^\s*-\s*(DOMAIN(?:-SUFFIX|-KEYWORD)?),([^,]+),(.+)\s*$/;
 const DIRECT_MARKER = "# 自定义直连";
 const PROXY_MARKER = "# 自定义代理";
-const ACL4SSR_MARKER = "# ACL4SSR";
+const IP_MARKER = "# 自定义 IP";
+const END_MARKER = "# 自定义结束";
+
+function findEndMarkerIdx(content: string, from: number): number {
+  return content.indexOf(END_MARKER, from);
+}
 
 function parseRuleLine(line: string): CustomRule | null {
   const match = line.match(RULE_LINE);
@@ -49,16 +54,25 @@ function parseCustomRules(content: string): { direct: CustomRule[]; proxy: Custo
   const rulesIdx = content.indexOf("rules:");
   if (rulesIdx === -1) return { direct: [], proxy: [] };
 
-  const aclIdx = content.indexOf(ACL4SSR_MARKER, rulesIdx);
-  if (aclIdx === -1) return { direct: [], proxy: [] };
+  const systemIdx = findEndMarkerIdx(content, rulesIdx);
+  if (systemIdx === -1) return { direct: [], proxy: [] };
 
-  const customBlock = content.slice(rulesIdx, aclIdx);
+  const customBlock = content.slice(rulesIdx, systemIdx);
   const directIdx = customBlock.indexOf(DIRECT_MARKER);
   const proxyIdx = customBlock.indexOf(PROXY_MARKER);
+  const ipIdx = customBlock.indexOf(IP_MARKER);
 
   const directBlock =
     directIdx === -1 ? "" : customBlock.slice(directIdx, proxyIdx === -1 ? customBlock.length : proxyIdx);
-  const proxyBlock = proxyIdx === -1 ? "" : customBlock.slice(proxyIdx);
+
+  let proxyBlock = "";
+  if (proxyIdx !== -1) {
+    const proxyEnd =
+      ipIdx !== -1 && ipIdx > proxyIdx
+        ? ipIdx
+        : customBlock.length;
+    proxyBlock = customBlock.slice(proxyIdx, proxyEnd);
+  }
 
   const direct: CustomRule[] = [];
   const proxy: CustomRule[] = [];
@@ -95,15 +109,19 @@ function mergeCustomRules(content: string, direct: CustomRule[], proxy: CustomRu
   const rulesIdx = content.indexOf("rules:");
   if (rulesIdx === -1) throw new Error("ccalm-rules.yaml 缺少 rules: 段");
 
-  const aclIdx = content.indexOf(ACL4SSR_MARKER, rulesIdx);
-  if (aclIdx === -1) throw new Error("ccalm-rules.yaml 缺少 # ACL4SSR 标记");
+  const systemIdx = findEndMarkerIdx(content, rulesIdx);
+  if (systemIdx === -1) {
+    throw new Error("ccalm-rules.yaml 缺少 # 自定义结束 标记");
+  }
+
+  // 保留「自定义 IP」等非网页管理段（位于结束标记之前）
+  const ipIdx = content.indexOf(IP_MARKER, rulesIdx);
+  const preserved =
+    ipIdx !== -1 && ipIdx < systemIdx ? content.slice(ipIdx, systemIdx) : "";
 
   const before = content.slice(0, rulesIdx + "rules:\n".length);
-  let after = content.slice(aclIdx);
-  if (!after.startsWith("  # ACL4SSR")) {
-    after = after.replace(/^\s*# ACL4SSR/, "  # ACL4SSR");
-  }
-  return `${before}${buildCustomBlock(direct, proxy)}${after}`;
+  const after = content.slice(systemIdx);
+  return `${before}${buildCustomBlock(direct, proxy)}${preserved}${after}`;
 }
 
 function validateRules(rules: CustomRule[], allowedPolicies: Set<string>, requireDirect: boolean): string | null {
