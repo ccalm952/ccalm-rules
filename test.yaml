@@ -73,6 +73,7 @@ rules:
   - DOMAIN-SUFFIX,lichidental.com,DIRECT
   - DOMAIN-SUFFIX,yutoons.com,DIRECT
   - DOMAIN-SUFFIX,mmm920.com,DIRECT
+  - DOMAIN-SUFFIX,zenlesszonezero.com,DIRECT
 
   # 自建服务器 IP
   - IP-CIDR,38.55.195.82/32,DIRECT,no-resolve
