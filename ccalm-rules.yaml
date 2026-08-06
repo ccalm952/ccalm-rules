@@ -68,12 +68,12 @@ rule-providers:
     interval: 86400
 
 rules:
+  # 自定义（由 rules-web/ 管理页维护）
   # 自定义直连
   - DOMAIN-SUFFIX,ccalm.xyz,DIRECT
   - DOMAIN-SUFFIX,lichidental.com,DIRECT
   - DOMAIN-SUFFIX,yutoons.com,DIRECT
   - DOMAIN-SUFFIX,mmm920.com,DIRECT
-  - DOMAIN-SUFFIX,zenlesszonezero.com,DIRECT
 
   # 自定义代理
   - DOMAIN-SUFFIX,store.bblcdn.com,香港节点
@@ -81,8 +81,7 @@ rules:
   - DOMAIN-SUFFIX,agedm.vip,香港节点
   - DOMAIN-SUFFIX,xifanacg.com,香港节点
   - DOMAIN-SUFFIX,sidestore.io,香港节点
-
-  # 自定义 IP
+# 自定义 IP
   - IP-CIDR,38.55.195.82/32,DIRECT,no-resolve
   - IP-CIDR,38.55.96.234/32,DIRECT,no-resolve
   - IP-CIDR,198.46.175.234/32,DIRECT,no-resolve
