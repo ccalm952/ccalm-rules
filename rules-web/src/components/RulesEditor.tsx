@@ -177,7 +177,7 @@ export function RulesEditor({ password }: RulesEditorProps) {
       "  # 自定义代理",
       ...proxy.map((r) => `  - ${ruleToLine(r)}`),
       "",
-      "  # ACL4SSR",
+      "  # Loyalsoldier",
       "  ...",
     ];
     return lines.join("\n");
