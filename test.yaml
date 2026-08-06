@@ -87,8 +87,8 @@ rules:
   - IP-CIDR,38.55.96.234/32,DIRECT,no-resolve
   - IP-CIDR,198.46.175.234/32,DIRECT,no-resolve
 
-  # Loyalsoldier 白名单
-  # https://github.com/Loyalsoldier/v2ray-rules-dat
+  # 自定义结束
+
   # GEOSITE → geox-url.geosite
   - GEOSITE,tld-cn,DIRECT
   - GEOSITE,category-games@cn,DIRECT

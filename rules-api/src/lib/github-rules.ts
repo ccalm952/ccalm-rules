@@ -20,16 +20,10 @@ const RULE_LINE = /^\s*-\s*(DOMAIN(?:-SUFFIX|-KEYWORD)?),([^,]+),(.+)\s*$/;
 const DIRECT_MARKER = "# 自定义直连";
 const PROXY_MARKER = "# 自定义代理";
 const IP_MARKER = "# 自定义 IP";
-/** 自定义段结束标记（优先匹配靠前的） */
-const SYSTEM_MARKERS = ["# Loyalsoldier", "# ACL4SSR"] as const;
+const END_MARKER = "# 自定义结束";
 
-function findSystemMarkerIdx(content: string, from: number): number {
-  let best = -1;
-  for (const marker of SYSTEM_MARKERS) {
-    const idx = content.indexOf(marker, from);
-    if (idx !== -1 && (best === -1 || idx < best)) best = idx;
-  }
-  return best;
+function findEndMarkerIdx(content: string, from: number): number {
+  return content.indexOf(END_MARKER, from);
 }
 
 function parseRuleLine(line: string): CustomRule | null {
@@ -60,7 +54,7 @@ function parseCustomRules(content: string): { direct: CustomRule[]; proxy: Custo
   const rulesIdx = content.indexOf("rules:");
   if (rulesIdx === -1) return { direct: [], proxy: [] };
 
-  const systemIdx = findSystemMarkerIdx(content, rulesIdx);
+  const systemIdx = findEndMarkerIdx(content, rulesIdx);
   if (systemIdx === -1) return { direct: [], proxy: [] };
 
   const customBlock = content.slice(rulesIdx, systemIdx);
@@ -115,12 +109,12 @@ function mergeCustomRules(content: string, direct: CustomRule[], proxy: CustomRu
   const rulesIdx = content.indexOf("rules:");
   if (rulesIdx === -1) throw new Error("ccalm-rules.yaml 缺少 rules: 段");
 
-  const systemIdx = findSystemMarkerIdx(content, rulesIdx);
+  const systemIdx = findEndMarkerIdx(content, rulesIdx);
   if (systemIdx === -1) {
-    throw new Error("ccalm-rules.yaml 缺少 # Loyalsoldier 或 # ACL4SSR 标记");
+    throw new Error("ccalm-rules.yaml 缺少 # 自定义结束 标记");
   }
 
-  // 保留「自定义 IP」等非网页管理段（位于系统规则标记之前）
+  // 保留「自定义 IP」等非网页管理段（位于结束标记之前）
   const ipIdx = content.indexOf(IP_MARKER, rulesIdx);
   const preserved =
     ipIdx !== -1 && ipIdx < systemIdx ? content.slice(ipIdx, systemIdx) : "";
