@@ -73,7 +73,6 @@ rules:
   - DOMAIN-SUFFIX,lichidental.com,DIRECT
   - DOMAIN-SUFFIX,yutoons.com,DIRECT
   - DOMAIN-SUFFIX,mmm920.com,DIRECT
-  - DOMAIN-SUFFIX,zenlesszonezero.com,DIRECT
 
   # 自定义代理
   - DOMAIN-SUFFIX,store.bblcdn.com,香港节点
@@ -94,6 +93,8 @@ rules:
   - GEOSITE,category-games@cn,DIRECT
   - GEOSITE,category-ai-!cn,AI
   - GEOSITE,github,手动选择
+  - GEOSITE,apple-cn,DIRECT
+  - GEOSITE,apple,苹果服务
   - GEOSITE,microsoft,微软服务
   - GEOSITE,geolocation-!cn,手动选择
   - GEOSITE,cn,DIRECT
@@ -119,6 +120,13 @@ proxy-groups:
       - DIRECT
 
   - name: 微软服务
+    type: select
+    proxies:
+      - DIRECT
+      - 香港节点
+      - 美国节点
+
+  - name: 苹果服务
     type: select
     proxies:
       - DIRECT

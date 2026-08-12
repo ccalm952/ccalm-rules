@@ -81,7 +81,8 @@ rules:
   - DOMAIN-SUFFIX,agedm.vip,香港节点
   - DOMAIN-SUFFIX,xifanacg.com,香港节点
   - DOMAIN-SUFFIX,sidestore.io,香港节点
-# 自定义 IP
+
+  # 自定义 IP
   - IP-CIDR,38.55.195.82/32,DIRECT,no-resolve
   - IP-CIDR,38.55.96.234/32,DIRECT,no-resolve
   - IP-CIDR,198.46.175.234/32,DIRECT,no-resolve
@@ -93,6 +94,8 @@ rules:
   - GEOSITE,category-games@cn,DIRECT
   - GEOSITE,category-ai-!cn,AI
   - GEOSITE,github,手动选择
+  - GEOSITE,apple-cn,DIRECT
+  - GEOSITE,apple,苹果服务
   - GEOSITE,microsoft,微软服务
   - GEOSITE,geolocation-!cn,手动选择
   - GEOSITE,cn,DIRECT
@@ -118,6 +121,13 @@ proxy-groups:
       - DIRECT
 
   - name: 微软服务
+    type: select
+    proxies:
+      - DIRECT
+      - 香港节点
+      - 美国节点
+
+  - name: 苹果服务
     type: select
     proxies:
       - DIRECT
