@@ -173,7 +173,7 @@ export function SpeedTestEditor(_props: SpeedTestEditorProps) {
           <CardDescription>支持填写域名或完整 URL；默认测 3 次取平均</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label htmlFor="speed-url">网址</Label>
             <Input
               id="speed-url"
@@ -206,7 +206,7 @@ export function SpeedTestEditor(_props: SpeedTestEditorProps) {
           </div>
 
           <div className="flex flex-wrap items-end gap-3">
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="speed-rounds">次数</Label>
               <Input
                 id="speed-rounds"
@@ -279,7 +279,7 @@ export function SpeedTestEditor(_props: SpeedTestEditorProps) {
                   {result.min == null ? "—" : `${result.min} ms`}
                 </div>
               </div>
-              <div className="rounded-lg border p-3">
+              <div className="rounded-lg border border-primary/40 bg-primary/5 p-3">
                 <div className="text-xs text-muted-foreground">平均</div>
                 <div className={cn("mt-1 text-xl font-semibold", latencyColor(result.avg))}>
                   {result.avg == null ? "—" : `${result.avg} ms`}
