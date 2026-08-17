@@ -20,11 +20,17 @@ function normalizeUrl(input: string): string {
 }
 
 /** 在浏览器本机发起请求，测本地网络到目标站的耗时（经软路由/代理路径）。 */
-export async function measureOnce(rawUrl: string, timeoutMs = 12000): Promise<LatencySample> {
+export async function measureOnce(
+  rawUrl: string,
+  timeoutMs = 12000,
+  signal?: AbortSignal,
+): Promise<LatencySample> {
   const url = new URL(normalizeUrl(rawUrl));
   url.searchParams.set("_t", String(Date.now()));
 
   const controller = new AbortController();
+  const onAbort = () => controller.abort();
+  signal?.addEventListener("abort", onAbort, { once: true });
   const timer = window.setTimeout(() => controller.abort(), timeoutMs);
   const start = performance.now();
 
@@ -41,7 +47,7 @@ export async function measureOnce(rawUrl: string, timeoutMs = 12000): Promise<La
   } catch (err) {
     const ms = Math.round(performance.now() - start);
     if (err instanceof DOMException && err.name === "AbortError") {
-      return { ms, ok: false, error: "超时" };
+      return { ms, ok: false, error: signal?.aborted ? "已取消" : "超时" };
     }
     return {
       ms,
@@ -50,19 +56,38 @@ export async function measureOnce(rawUrl: string, timeoutMs = 12000): Promise<La
     };
   } finally {
     window.clearTimeout(timer);
+    signal?.removeEventListener("abort", onAbort);
   }
+}
+
+export interface LatencyProgress {
+  sample: LatencySample;
+  done: number;
+  total: number;
 }
 
 export async function measureLatency(
   rawUrl: string,
   rounds = 3,
   timeoutMs = 12000,
+  onProgress?: (progress: LatencyProgress) => void,
+  signal?: AbortSignal,
 ): Promise<LatencyResult> {
   const url = normalizeUrl(rawUrl);
+  try {
+    new URL(url);
+  } catch {
+    throw new Error("网址格式不正确，请检查后重试");
+  }
+
   const samples: LatencySample[] = [];
 
   for (let i = 0; i < rounds; i++) {
-    samples.push(await measureOnce(url, timeoutMs));
+    if (signal?.aborted) break;
+    const sample = await measureOnce(url, timeoutMs, signal);
+    samples.push(sample);
+    onProgress?.({ sample, done: samples.length, total: rounds });
+    if (signal?.aborted) break;
   }
 
   const okSamples = samples.filter((s) => s.ok).map((s) => s.ms);
