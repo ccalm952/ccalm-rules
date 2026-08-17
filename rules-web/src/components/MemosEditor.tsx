@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { StickyNote, Pin, Plus, RefreshCw, Save, Search } from "lucide-react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { StickyNote, Pin, Plus, RefreshCw, Search } from "lucide-react";
 import { toast } from "sonner";
 import { DeleteConfirmButton } from "@/components/DeleteConfirmButton";
 import { MemoMarkdown } from "@/components/MemoMarkdown";
@@ -46,6 +46,15 @@ const emptyDraft: Draft = {
   pinned: false,
 };
 
+const AUTO_SAVE_MS = 600;
+
+function sortMemos(items: Memo[]): Memo[] {
+  return [...items].sort((a, b) => {
+    if (a.pinned !== b.pinned) return a.pinned ? -1 : 1;
+    return b.updatedAt.localeCompare(a.updatedAt) || b.id - a.id;
+  });
+}
+
 function ListSkeleton() {
   return (
     <div className="space-y-2">
@@ -69,6 +78,15 @@ function formatTime(value: string) {
   }
 }
 
+function draftEquals(a: Draft, b: Draft) {
+  return (
+    a.title === b.title &&
+    a.content === b.content &&
+    a.category === b.category &&
+    a.pinned === b.pinned
+  );
+}
+
 export function MemosEditor({ password }: MemosEditorProps) {
   const [memos, setMemos] = useState<Memo[]>([]);
   const [loading, setLoading] = useState(true);
@@ -77,6 +95,10 @@ export function MemosEditor({ password }: MemosEditorProps) {
   const [selectedId, setSelectedId] = useState<number | "new" | null>(null);
   const [draft, setDraft] = useState<Draft>(emptyDraft);
   const [contentMode, setContentMode] = useState<"edit" | "preview">("edit");
+  const saveGenRef = useRef(0);
+  const skipHydrateRef = useRef(false);
+  const memosRef = useRef(memos);
+  memosRef.current = memos;
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -99,12 +121,17 @@ export function MemosEditor({ password }: MemosEditorProps) {
     void load();
   }, [load]);
 
+  // 仅在切换选中项时灌入草稿，避免自动保存回写列表时覆盖正在编辑的内容
   useEffect(() => {
     if (selectedId === null || selectedId === "new") {
       if (selectedId === "new") setDraft(emptyDraft);
       return;
     }
-    const memo = memos.find((item) => item.id === selectedId);
+    if (skipHydrateRef.current) {
+      skipHydrateRef.current = false;
+      return;
+    }
+    const memo = memosRef.current.find((item) => item.id === selectedId);
     if (!memo) return;
     setDraft({
       title: memo.title,
@@ -112,7 +139,81 @@ export function MemosEditor({ password }: MemosEditorProps) {
       category: memo.category,
       pinned: memo.pinned,
     });
+  }, [selectedId]);
+
+  const savedDraft = useMemo((): Draft | null => {
+    if (typeof selectedId !== "number") return null;
+    const memo = memos.find((item) => item.id === selectedId);
+    if (!memo) return null;
+    return {
+      title: memo.title,
+      content: memo.content,
+      category: memo.category,
+      pinned: memo.pinned,
+    };
   }, [selectedId, memos]);
+
+  const dirty = useMemo(() => {
+    if (selectedId === "new") {
+      return Boolean(
+        draft.title.trim() || draft.content.trim() || draft.category.trim() || draft.pinned,
+      );
+    }
+    if (typeof selectedId !== "number" || !savedDraft) return false;
+    return !draftEquals(draft, savedDraft);
+  }, [selectedId, draft, savedDraft]);
+
+  useEffect(() => {
+    if (!dirty) return;
+
+    const gen = ++saveGenRef.current;
+    const timer = window.setTimeout(() => {
+      void (async () => {
+        if (gen !== saveGenRef.current) return;
+        setSaving(true);
+        try {
+          if (selectedId === "new") {
+            const created = await createMemo(password, {
+              title: draft.title.trim() || "未命名",
+              content: draft.content,
+              category: draft.category.trim(),
+              pinned: draft.pinned,
+            });
+            setMemos((prev) =>
+              sortMemos([created, ...prev.filter((item) => item.id !== created.id)]),
+            );
+            skipHydrateRef.current = true;
+            if (gen === saveGenRef.current && !draft.title.trim()) {
+              setDraft((prev) => ({ ...prev, title: "未命名" }));
+            }
+            setSelectedId(created.id);
+          } else if (typeof selectedId === "number") {
+            const updated = await updateMemo(password, selectedId, {
+              title: draft.title.trim() || "未命名",
+              content: draft.content,
+              category: draft.category.trim(),
+              pinned: draft.pinned,
+            });
+            if (gen !== saveGenRef.current) return;
+            setMemos((prev) =>
+              sortMemos(prev.map((item) => (item.id === updated.id ? updated : item))),
+            );
+            if (!draft.title.trim()) {
+              setDraft((prev) => ({ ...prev, title: "未命名" }));
+            }
+          }
+        } catch (err) {
+          if (gen === saveGenRef.current) {
+            toast.error(err instanceof Error ? err.message : "保存失败");
+          }
+        } finally {
+          if (gen === saveGenRef.current) setSaving(false);
+        }
+      })();
+    }, AUTO_SAVE_MS);
+
+    return () => window.clearTimeout(timer);
+  }, [dirty, draft, selectedId, password]);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -124,51 +225,21 @@ export function MemosEditor({ password }: MemosEditorProps) {
   }, [memos, query]);
 
   function startCreate() {
+    saveGenRef.current += 1;
+    setSaving(false);
     setSelectedId("new");
     setDraft(emptyDraft);
     setContentMode("edit");
   }
 
-  async function handleSave() {
-    if (!draft.title.trim()) {
-      toast.error("请填写标题");
-      return;
-    }
-
-    setSaving(true);
-    try {
-      if (selectedId === "new" || selectedId === null) {
-        const created = await createMemo(password, {
-          title: draft.title.trim(),
-          content: draft.content,
-          category: draft.category.trim(),
-          pinned: draft.pinned,
-        });
-        toast.success("已创建");
-        await load();
-        setSelectedId(created.id);
-      } else {
-        await updateMemo(password, selectedId, {
-          title: draft.title.trim(),
-          content: draft.content,
-          category: draft.category.trim(),
-          pinned: draft.pinned,
-        });
-        toast.success("已保存");
-        await load();
-      }
-    } catch (err) {
-      toast.error(err instanceof Error ? err.message : "保存失败");
-    } finally {
-      setSaving(false);
-    }
-  }
-
   async function handleTogglePin(memo: Memo) {
     try {
-      await updateMemo(password, memo.id, { pinned: !memo.pinned });
+      const updated = await updateMemo(password, memo.id, { pinned: !memo.pinned });
       toast.success(memo.pinned ? "已取消置顶" : "已置顶");
-      await load();
+      setMemos((prev) => sortMemos(prev.map((item) => (item.id === updated.id ? updated : item))));
+      if (selectedId === memo.id) {
+        setDraft((prev) => ({ ...prev, pinned: updated.pinned }));
+      }
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "更新失败");
     }
@@ -176,10 +247,12 @@ export function MemosEditor({ password }: MemosEditorProps) {
 
   async function handleDelete(id: number) {
     try {
+      saveGenRef.current += 1;
+      setSaving(false);
       await deleteMemo(password, id);
       toast.success("已删除");
+      setMemos((prev) => prev.filter((item) => item.id !== id));
       if (selectedId === id) setSelectedId(null);
-      await load();
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "删除失败");
     }
@@ -193,7 +266,7 @@ export function MemosEditor({ password }: MemosEditorProps) {
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">备忘录</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Markdown：``两个反引号`` 可复制，`一个` 仅高亮；代码块右上角可复制
+            Markdown：``两个反引号`` 可复制，`一个` 仅高亮；代码块右上角可复制；编辑后自动保存
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -241,6 +314,8 @@ export function MemosEditor({ password }: MemosEditorProps) {
                   key={memo.id}
                   type="button"
                   onClick={() => {
+                    saveGenRef.current += 1;
+                    setSaving(false);
                     setSelectedId(memo.id);
                     setContentMode("preview");
                   }}
@@ -286,7 +361,8 @@ export function MemosEditor({ password }: MemosEditorProps) {
               <div>
                 <CardTitle>{selectedId === "new" ? "新建备忘录" : "编辑备忘录"}</CardTitle>
                 <CardDescription>
-                  ``两个反引号`` 包住可点击复制；`一个反引号` 只做行内高亮；三个反引号是代码块
+                  {saving ? "保存中…" : dirty ? "待保存" : "已自动保存"}
+                  ；``两个反引号`` 包住可点击复制；`一个反引号` 只做行内高亮；三个反引号是代码块
                 </CardDescription>
               </div>
               {typeof selectedId === "number" ? (
@@ -376,10 +452,6 @@ export function MemosEditor({ password }: MemosEditorProps) {
                   创建后置顶
                 </label>
               ) : null}
-              <Button type="button" onClick={() => void handleSave()} disabled={saving}>
-                {saving ? <Spinner /> : <Save />}
-                保存
-              </Button>
             </CardContent>
           </Card>
         ) : (
