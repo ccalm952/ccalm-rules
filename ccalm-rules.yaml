@@ -94,6 +94,7 @@ rules:
   - GEOSITE,category-games@cn,DIRECT
   - GEOSITE,category-ai-!cn,AI
   - GEOSITE,github,手动选择
+  - GEOSITE,youtube,YouTube
   - GEOSITE,apple-cn,DIRECT
   - GEOSITE,apple,苹果服务
   - GEOSITE,microsoft,微软服务
@@ -119,6 +120,13 @@ proxy-groups:
       - 美国节点
       - 香港节点
       - DIRECT
+
+  - name: YouTube
+    type: select
+    proxies:
+      - 美国节点
+      - 香港节点
+      - 手动选择
 
   - name: 微软服务
     type: select
