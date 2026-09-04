@@ -1,4 +1,5 @@
 # 官方示例：https://github.com/MetaCubeX/mihomo/blob/Meta/docs/config.yaml
+
 # 运行模式
 mode: rule
 keep-alive-interval: 15
@@ -113,20 +114,21 @@ proxy-groups:
     proxies:
       - 香港节点
       - 美国节点
+      - 大带宽
 
   - name: AI
     type: select
     proxies:
       - 美国节点
       - 香港节点
-      - DIRECT
+      - 大带宽
 
   - name: YouTube
     type: select
     proxies:
-      - 美国节点
+      - 大带宽
       - 香港节点
-      - 手动选择
+      - 美国节点
 
   - name: 微软服务
     type: select
@@ -134,6 +136,7 @@ proxy-groups:
       - DIRECT
       - 香港节点
       - 美国节点
+      - 大带宽
 
   - name: 苹果服务
     type: select
@@ -141,6 +144,7 @@ proxy-groups:
       - DIRECT
       - 香港节点
       - 美国节点
+      - 大带宽
 
   - name: 香港节点
     type: url-test
@@ -154,6 +158,14 @@ proxy-groups:
     type: url-test
     include-all: true
     filter: "美国"
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    tolerance: 50
+
+  - name: 大带宽
+    type: url-test
+    include-all: true
+    filter: "大带宽"
     url: https://www.gstatic.com/generate_204
     interval: 300
     tolerance: 50
