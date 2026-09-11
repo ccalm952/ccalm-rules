@@ -84,8 +84,9 @@ rules:
 
   # 自定义 IP
   - IP-CIDR,38.55.195.82/32,DIRECT,no-resolve
-  - IP-CIDR,38.55.96.234/32,DIRECT,no-resolve
   - IP-CIDR,198.46.175.234/32,DIRECT,no-resolve
+  - IP-CIDR,38.55.192.95/32,DIRECT,no-resolve
+  - IP-CIDR,193.200.130.20/32,DIRECT,no-resolve
 
   # 自定义结束
 
