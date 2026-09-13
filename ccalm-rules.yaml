@@ -68,12 +68,12 @@ rule-providers:
     interval: 86400
 
   # 自维护大带宽域名 → 大带宽策略组
-  bandwidth-domains:
+  bandwidth:
     type: http
     behavior: domain
     format: text
-    url: "https://raw.githubusercontent.com/ccalm952/ccalm-rules/main/bandwidth_domains.list"
-    path: ./ruleset/bandwidth-domains.list
+    url: "https://raw.githubusercontent.com/ccalm952/ccalm-rules/main/bandwidth.list"
+    path: ./ruleset/bandwidth.list
     interval: 86400
 
 rules:
@@ -96,7 +96,7 @@ rules:
   # 自定义结束
 
   # 自维护大带宽列表
-  - RULE-SET,bandwidth-domains,大带宽
+  - RULE-SET,bandwidth,大带宽
 
   # GEOSITE → geox-url.geosite
   - GEOSITE,tld-cn,DIRECT
