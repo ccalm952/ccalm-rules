@@ -1,0 +1,11 @@
+# ccalm 视频域名（名单内走「视频」策略组）
+# 格式同 fake_ip_filter.list：一行一个域名，+. 表示含子域
+
+# 动漫 / 影视站
++.iyf.tv
++.agedm.vip
++.xifanacg.com
+
+# CDN / 资源
++.store.bblcdn.com
++.bblcdn.com
