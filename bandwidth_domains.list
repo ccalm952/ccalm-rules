@@ -1,0 +1,11 @@
+# ccalm 大带宽域名（名单内走「大带宽」策略组）
+# 格式同 fake_ip_filter.list：一行一个域名，+. 表示含子域
+
+# 动漫 / 影视站
++.iyf.tv
++.agedm.vip
++.xifanacg.com
+
+# 拓竹 Bambu Lab CDN（海外 CloudFront，大文件下载）
++.store.bblcdn.com
++.bblcdn.com
