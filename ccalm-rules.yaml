@@ -83,7 +83,6 @@ rules:
   - DOMAIN-SUFFIX,lichidental.com,DIRECT
   - DOMAIN-SUFFIX,mmm920.com,DIRECT
   - DOMAIN-SUFFIX,yutoons.com,DIRECT
-  - DOMAIN-SUFFIX,bambulab.com,DIRECT
 
   # 自定义代理
   - DOMAIN-SUFFIX,sidestore.io,香港节点
