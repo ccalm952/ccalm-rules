@@ -67,15 +67,6 @@ rule-providers:
     path: ./ruleset/fakeip-filter.list
     interval: 86400
 
-  # 自维护大带宽域名 → 大带宽策略组
-  bandwidth:
-    type: http
-    behavior: domain
-    format: text
-    url: "https://raw.githubusercontent.com/ccalm952/ccalm-rules/main/bandwidth.list"
-    path: ./ruleset/bandwidth.list
-    interval: 86400
-
 rules:
   # 自定义直连
   - DOMAIN-SUFFIX,ccalm.xyz,DIRECT
@@ -92,9 +83,6 @@ rules:
   - IP-CIDR,198.46.175.234/32,DIRECT,no-resolve
 
   # 自定义结束
-
-  # 自维护大带宽列表
-  - RULE-SET,bandwidth,大带宽
 
   # GEOSITE → geox-url.geosite
   - GEOSITE,tld-cn,DIRECT
