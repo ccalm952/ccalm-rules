@@ -22,8 +22,17 @@ const PROXY_MARKER = "# 自定义代理";
 const IP_MARKER = "# 自定义 IP";
 const END_MARKER = "# 自定义结束";
 
+/** 定位标记所在行的行首（含缩进），避免 indexOf 命中 `#` 后丢掉前导空格 */
+function findMarkerLineStart(content: string, marker: string, from = 0): number {
+  const idx = content.indexOf(marker, from);
+  if (idx === -1) return -1;
+  let start = idx;
+  while (start > 0 && content[start - 1] !== "\n") start--;
+  return start;
+}
+
 function findEndMarkerIdx(content: string, from: number): number {
-  return content.indexOf(END_MARKER, from);
+  return findMarkerLineStart(content, END_MARKER, from);
 }
 
 function parseRuleLine(line: string): CustomRule | null {
@@ -114,13 +123,16 @@ function mergeCustomRules(content: string, direct: CustomRule[], proxy: CustomRu
     throw new Error("ccalm-rules.yaml 缺少 # 自定义结束 标记");
   }
 
-  // 保留「自定义 IP」等非网页管理段（位于结束标记之前）
-  const ipIdx = content.indexOf(IP_MARKER, rulesIdx);
-  const preserved =
-    ipIdx !== -1 && ipIdx < systemIdx ? content.slice(ipIdx, systemIdx) : "";
+  // 保留「自定义 IP」等非网页管理段（位于结束标记之前），并统一标记缩进
+  const ipIdx = findMarkerLineStart(content, IP_MARKER, rulesIdx);
+  let preserved = "";
+  if (ipIdx !== -1 && ipIdx < systemIdx) {
+    preserved = content.slice(ipIdx, systemIdx).replace(/^[ \t]*# 自定义 IP/m, "  # 自定义 IP");
+    if (!preserved.endsWith("\n")) preserved += "\n";
+  }
 
   const before = content.slice(0, rulesIdx + "rules:\n".length);
-  const after = content.slice(systemIdx);
+  const after = content.slice(systemIdx).replace(/^[ \t]*# 自定义结束/m, "  # 自定义结束");
   return `${before}${buildCustomBlock(direct, proxy)}${preserved}${after}`;
 }
 

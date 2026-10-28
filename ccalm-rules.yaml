@@ -77,7 +77,8 @@ rules:
 
   # 自定义代理
   - DOMAIN-SUFFIX,sidestore.io,香港节点
-# 自定义 IP
+
+  # 自定义 IP
   - IP-CIDR,38.55.195.82/32,DIRECT,no-resolve
   - IP-CIDR,193.200.130.20/32,DIRECT,no-resolve
   - IP-CIDR,83.229.120.68/32,DIRECT,no-resolve
