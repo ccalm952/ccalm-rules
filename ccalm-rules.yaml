@@ -86,6 +86,9 @@ rules:
 
   # 自定义结束
 
+  # 境外 QUIC 走代理会被运营商 UDP 限速，拒绝后浏览器回落到 TCP
+  - AND,((NETWORK,UDP),(DST-PORT,443),(NOT,((GEOSITE,cn)))),REJECT
+
   # GEOSITE → geox-url.geosite
   - GEOSITE,tld-cn,DIRECT
   - GEOSITE,category-games@cn,DIRECT
