@@ -63,7 +63,7 @@ rule-providers:
     type: http
     behavior: domain
     format: text
-    url: "https://raw.githubusercontent.com/ccalm952/ccalm-rules/main/fake_ip_filter.list"
+    url: "https://cdn.jsdelivr.net/gh/ccalm952/ccalm-rules@main/fake_ip_filter.list"
     path: ./ruleset/fakeip-filter.list
     interval: 86400
 
