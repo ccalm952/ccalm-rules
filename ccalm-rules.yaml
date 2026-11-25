@@ -82,7 +82,7 @@ rules:
   # 自定义 IP
   - IP-CIDR,38.55.96.89/32,DIRECT,no-resolve
   - IP-CIDR,186.241.107.151/32,DIRECT,no-resolve
-  - IP-CIDR,83.229.120.68/32,DIRECT,no-resolve
+  - IP-CIDR,83.229.126.150/32,DIRECT,no-resolve
 
   # 自定义结束
 
